@@ -1,1 +1,3 @@
-export class SubscribeModel {}
+export class SubscribeModel {
+	email: string;
+}
