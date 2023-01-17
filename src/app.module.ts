@@ -8,9 +8,10 @@ import { SubscribeModule } from './subscribe/subscribe.module';
 import { PageProductsModule } from './page-products/page-products.module';
 import { ProductModule } from './product/product.module';
 import { FeedbackModule } from './feedback/feedback.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
-  imports: [AuthModule, UserModule, OrderModule, SubscribeModule, PageProductsModule, ProductModule, FeedbackModule],
+  imports: [AuthModule, UserModule, OrderModule, SubscribeModule, PageProductsModule, ProductModule, FeedbackModule, ReviewModule],
   controllers: [AppController],
   providers: [AppService],
 })
