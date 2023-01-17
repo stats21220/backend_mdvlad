@@ -1,25 +1,25 @@
 import { IPrice } from "src/interfaces/Price.interface";
 
 
-export interface ProductCategoryItem {
+export interface ProductCategoryItemDto {
 	level: string;
 	route?: string
 }
 
-export interface ProductCategoryLevel {
-	first: ProductCategoryItem;
-	second?: ProductCategoryItem;
-	third?: ProductCategoryItem;
-	fifth?:  ProductCategoryItem;
+export interface ProductCategoryLevelDto {
+	first: ProductCategoryItemDto;
+	second?: ProductCategoryItemDto;
+	third?: ProductCategoryItemDto;
+	fifth?:  ProductCategoryItemDto;
 }
 
-export class ProductModel {
+export class CreateProductDto {
 	productId: number;
 	image: string;
 	calculatedRating: number;
 	title: number;
 	route?: string;
-	categories: ProductCategoryLevel;
+	categories: ProductCategoryLevelDto;
 	price: IPrice[];
 	oldPrice?: IPrice[];
 	tags: string[];

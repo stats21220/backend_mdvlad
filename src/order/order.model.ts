@@ -11,9 +11,12 @@ export interface IOrderProduct  {
 
 
 export class OrderModel {
+	orderId: string;
+	date: Date;
 	totalSum: string;
 	product: IOrderProduct[];
 	delivery: IDelivery;
 	pay: string;
-	comment: string;
+	comment?: string;
+	userId?: number;
 }
