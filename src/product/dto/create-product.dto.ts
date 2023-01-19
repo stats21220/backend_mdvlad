@@ -1,5 +1,15 @@
-import { IPrice } from "src/interfaces/Price.interface";
 
+
+export interface PriceProductDto {
+	name: string;
+	value: number;
+	count: number;
+}
+
+export interface ProductcharacteeristicsDto {
+	title: string;
+	value: string | number;
+}
 
 export interface ProductCategoryItemDto {
 	level: string;
@@ -13,15 +23,15 @@ export interface ProductCategoryLevelDto {
 	fifth?:  ProductCategoryItemDto;
 }
 
-export class CreateProductDto {
+export interface CreateProductDto {
 	productId: number;
 	image: string;
 	calculatedRating: number;
 	title: number;
 	route?: string;
 	categories: ProductCategoryLevelDto;
-	price: IPrice[];
-	oldPrice?: IPrice[];
+	price: PriceProductDto[];
+	oldPrice?: PriceProductDto[];
 	tags: string[];
 	characteeristics: {[key:string]: string | number};
 	count: number;
