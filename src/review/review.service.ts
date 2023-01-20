@@ -1,12 +1,13 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ModelType } from '@typegoose/typegoose/lib/types';
+import { InjectModel } from 'nestjs-typegoose';
 import { SubscribeModel } from 'src/subscribe/subscribe.model';
 import { CreateReviewDto } from './dto/create.review.dto';
 
 
 @Injectable()
 export class ReviewService {
-	constructor(@Inject(SubscribeModel) private readonly subscribeModel: ModelType<SubscribeModel>) {}
+	constructor(@InjectModel(SubscribeModel) private readonly subscribeModel: ModelType<SubscribeModel>) {}
 
 	async create(dto: CreateReviewDto) {
 		return await this.subscribeModel.create(dto)

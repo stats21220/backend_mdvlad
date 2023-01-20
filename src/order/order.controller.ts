@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create.order.dtp';
+import { ORDER_NOT_FOUND } from './order.constants';
 import { OrderModel } from './order.model';
 import { OrderService } from './order.service';
 
@@ -14,18 +15,29 @@ export class OrderController {
 
 	@Delete(':id')
 	async delete(@Param('id') id: string) {
-		return await this.delete(id)
+		const deleteOrder = await this.orderService.delete(id)
+		if (!deleteOrder) {
+			throw new HttpException(ORDER_NOT_FOUND, HttpStatus.NOT_FOUND)
+		}
+		return deleteOrder
 	}
 
 	@Patch(':id')
 	async patch(@Param('id') id: string, @Body() dto: CreateOrderDto) {
-		return await
-		this.orderService.patch(id, dto)
+		const updateOrder = await this.orderService.patch(id, dto)
+		if (!updateOrder) {
+			throw new HttpException(ORDER_NOT_FOUND, HttpStatus.NOT_FOUND)
+		}
+		return updateOrder
 	}
 
 	@Get(':id')
 	async get(@Param('id') id: string) {
-		return await this.orderService.get(id)
+		const getOrder = await this.orderService.get(id)
+		if (!getOrder) {
+			throw new HttpException(ORDER_NOT_FOUND, HttpStatus.NOT_FOUND)
+		}
+		return getOrder
 	}
 
 	async find() { ///// подумать над реализацией

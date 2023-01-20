@@ -1,12 +1,13 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ModelType } from '@typegoose/typegoose/lib/types';
+import { InjectModel } from 'nestjs-typegoose';
 import { CreateUserDto } from './dto/create.user.dto';
 import { FindUserDto } from './dto/find.user.dto';
 import { UserModel } from './user.model';
 
 @Injectable()
 export class UserService {
-	constructor(@Inject(UserModel) private readonly userModel: ModelType<UserModel>) {}
+	constructor(@InjectModel(UserModel) private readonly userModel: ModelType<UserModel>) {}
 
 	async create(dto: CreateUserDto) {
 		return await this.userModel.create(dto)

@@ -1,11 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ModelType } from '@typegoose/typegoose/lib/types';
+import { InjectModel } from 'nestjs-typegoose';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductModel } from './product.model';
 
 @Injectable()
 export class ProductService {
-	constructor(@Inject(ProductModel) private readonly productModel: ModelType<ProductModel>) {}
+	constructor(@InjectModel(ProductModel) private readonly productModel: ModelType<ProductModel>) {}
 
 	async create(dto: CreateProductDto) {
 		return await this.productModel.create(dto)
@@ -23,7 +24,7 @@ export class ProductService {
 		return await this.productModel.findById(id).exec()
 	}
 
-	async find() {
+	// async find() {
 		
-	}
+	// }
 }

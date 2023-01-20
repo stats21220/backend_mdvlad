@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { CreateProductDto, ProductCategoryLevelDto } from './dto/create-product.dto';
 import { ProductService } from './product.service';
 
@@ -14,21 +14,33 @@ export class ProductController {
 
 	@Delete(':id')
 	async delete(@Param('id') id: string) {
-		return await this.productService.delete(id)
+		const deleteProduct = await this.productService.delete(id)
+		if (!deleteProduct) {
+			throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND)
+		}
+		return deleteProduct
 	}
 
 	@Patch(':id')
 	async patch(@Param('id') id: string, @Body() dto: CreateProductDto) {
-		return await this.productService.patch(id, dto)
+		const updateProduct = await this.productService.patch(id, dto)
+		if (!updateProduct) {
+			throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND)
+		}
+		return updateProduct
 	}
 
 	@Get(':id')
 	async getId(@Param('id') id: string) {
-		return await this.productService.get(id)
+		const getProduct = await this.productService.get(id)
+		if (!getProduct) {
+			throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND)
+		}
+		return getProduct
 	}
 
-	@Post()
-	async find(@Body() dto: ProductCategoryLevelDto) {
-		return await this.productService.find(dto)
-	}
+	// @Post()
+	// async find(@Body() dto: ProductCategoryLevelDto) {
+	// 	return await this.productService.find(dto)
+	// }
 }

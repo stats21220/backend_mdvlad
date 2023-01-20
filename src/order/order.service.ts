@@ -1,11 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ModelType } from '@typegoose/typegoose/lib/types';
+import { InjectModel } from 'nestjs-typegoose';
 import { CreateOrderDto } from './dto/create.order.dtp';
 import { OrderModel } from './order.model';
 
 @Injectable()
 export class OrderService {
-	constructor(@Inject(OrderModel) private readonly orderModel: ModelType<OrderModel>) {}
+	constructor(@InjectModel(OrderModel) private readonly orderModel: ModelType<OrderModel>) {}
 
 	async create(dto: CreateOrderDto) {
 		return await this.orderModel.create(dto)

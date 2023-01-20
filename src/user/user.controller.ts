@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { CreateUserDto } from './dto/create.user.dto';
 import { FindUserDto } from './dto/find.user.dto';
-import { UserModel } from './user.model';
+import { USER_NOT_FOUND } from './user.constants';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -16,17 +16,29 @@ export class UserController {
 
 	@Delete(':id')
 	async delete(@Param('id') id: string) {
-		return await this.userService.delete(id)
+		const deleteUser = await this.userService.delete(id)
+		if (!deleteUser) {
+			throw new HttpException(USER_NOT_FOUND, HttpStatus.NOT_FOUND)
+		}
+		return deleteUser
 	}
 
 	@Patch(':id')
 	async patch(@Param('id') id: string, @Body() dto: CreateUserDto) {
-		return await this.userService.patch(id, dto)
+		const updateUser = await this.userService.patch(id, dto)
+		if (!updateUser) {
+			throw new HttpException(USER_NOT_FOUND, HttpStatus.NOT_FOUND)
+		}
+		return updateUser
 	}
 
 	@Get(':id')
 	async getId(@Param('id') id: string) {
-		return await this.userService.get(id)
+		const getUserId = await this.userService.get(id)
+		if (!getUserId) {
+			throw new HttpException(USER_NOT_FOUND, HttpStatus.NOT_FOUND)
+		}
+		return getUserId
 	}
 
 	@Post()

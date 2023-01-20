@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post } from '@nestjs/common';
 import { CreatePageProductsDto } from './dto/create.page-products.dto';
-import { PageProductsModel } from './page-products.model';
+import { PAGE_PRODUCTS_NOT_FOUND } from './page-products.constants';
 import { PageProductsService } from './page-products.service';
 
 @Controller('page-products')
@@ -14,17 +14,29 @@ export class PageProductsController {
 
 	@Delete(':id')
 	async delete(@Param('id') id: string) {
-		return await this.pageProductsService.delete(id)
+		const deletePageProducts = await this.pageProductsService.delete(id)
+		if (!deletePageProducts) {
+			throw new HttpException(PAGE_PRODUCTS_NOT_FOUND, HttpStatus.NOT_FOUND)
+		}
+		return deletePageProducts
 	}
 
 	@Patch(':id')
 	async patch(@Param('id') id: string, @Body() dto: CreatePageProductsDto) {
-		return await this.pageProductsService.patch(id, dto)
+		const updatePageProducts = await this.pageProductsService.patch(id, dto)
+		if (!updatePageProducts) {
+			throw new HttpException(PAGE_PRODUCTS_NOT_FOUND, HttpStatus.NOT_FOUND)
+		}
+		return updatePageProducts
 	}
 
 	@Get(':id')
 	async get(@Param('id') id: string) {
-		return await this.pageProductsService.get(id)
+		const getPageProducts = await this.pageProductsService.get(id)
+		if (!getPageProducts) {
+			throw new HttpException(PAGE_PRODUCTS_NOT_FOUND, HttpStatus.NOT_FOUND)
+		}
+		return getPageProducts
 	}
 
 	async find() { ///// подумать над реализацией
