@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { FeedbackModel } from 'src/feedback/feedback.model';
 import { OrderController } from './order.controller';
+import { OrderService } from './order.service';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { OrderController } from './order.controller';
       }
     }])
   ],
-  controllers: [OrderController]
+  controllers: [OrderController],
+  providers: [OrderService]
 })
 export class OrderModule {}

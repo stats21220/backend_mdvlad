@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { SubscribeController } from './subscribe.controller';
 import { SubscribeModel } from './subscribe.model';
+import { SubscribeService } from './subscribe.service';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { SubscribeModel } from './subscribe.model';
       }
     }])
   ],
-  controllers: [SubscribeController]
+  controllers: [SubscribeController],
+  providers: [SubscribeService]
 })
 export class SubscribeModule {}

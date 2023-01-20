@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { PageProductsController } from './page-products.controller';
 import { PageProductsModel } from './page-products.model';
+import { PageProductsService } from './page-products.service';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { PageProductsModel } from './page-products.model';
       }
     }])
   ],
-  controllers: [PageProductsController]
+  controllers: [PageProductsController],
+  providers: [PageProductsService]
 })
 export class PageProductsModule {}

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypegooseModule } from 'nestjs-typegoose';
 import { FeedbackController } from './feedback.controller';
 import { FeedbackModel } from './feedback.model';
+import { FeedbackService } from './feedback.service';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { FeedbackModel } from './feedback.model';
       }
     }])
   ],
-  controllers: [FeedbackController]
+  controllers: [FeedbackController],
+  providers: [FeedbackService]
 })
 export class FeedbackModule {}
