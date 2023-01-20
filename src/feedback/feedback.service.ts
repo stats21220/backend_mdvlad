@@ -5,4 +5,8 @@ import { FeedbackModel } from './feedback.model';
 @Injectable()
 export class FeedbackService {
 	constructor(@Inject(FeedbackModel) private readonly feedbackModel: ModelType<FeedbackModel>) {}
+
+	async create(dto: FeedbackModel) {
+		return await this.feedbackModel.create(dto)
+	}
 }

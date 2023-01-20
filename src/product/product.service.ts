@@ -1,8 +1,29 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ModelType } from '@typegoose/typegoose/lib/types';
+import { CreateProductDto } from './dto/create-product.dto';
 import { ProductModel } from './product.model';
 
 @Injectable()
 export class ProductService {
 	constructor(@Inject(ProductModel) private readonly productModel: ModelType<ProductModel>) {}
+
+	async create(dto: CreateProductDto) {
+		return await this.productModel.create(dto)
+	}
+
+	async delete(id: string) {
+		return await this.productModel.findByIdAndDelete(id)
+	}
+
+	async patch(id: string, dto: CreateProductDto) {
+		return await this.productModel.findByIdAndUpdate(id, dto)
+	}
+
+	async get(id: string) {
+		return await this.productModel.findById(id)
+	}
+
+	async find() {
+		
+	}
 }

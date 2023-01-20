@@ -5,4 +5,8 @@ import { SubscribeModel } from './subscribe.model';
 @Injectable()
 export class SubscribeService {
 	constructor(@Inject(SubscribeModel) private readonly subscribeModel: ModelType<SubscribeModel>) {}
+
+	async create(dto: SubscribeModel) {
+		return await this.subscribeModel.create(dto)
+	}
 }
