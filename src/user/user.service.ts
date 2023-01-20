@@ -1,12 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ModelType } from '@typegoose/typegoose/lib/types';
+import { CreateUserDto } from './dto/create.user.dto';
+import { FindUserDto } from './dto/find.user.dto';
 import { UserModel } from './user.model';
 
 @Injectable()
 export class UserService {
 	constructor(@Inject(UserModel) private readonly userModel: ModelType<UserModel>) {}
 
-	async create(dto: UserModel) {
+	async create(dto: CreateUserDto) {
 		return await this.userModel.create(dto)
 	}
 
@@ -14,7 +16,7 @@ export class UserService {
 		return await this.userModel.findByIdAndDelete(id)
 	}
 
-	async patch(id: string, dto: UserModel) {
+	async patch(id: string, dto: CreateUserDto) {
 		return await this.userModel.findByIdAndUpdate(id, dto)
 	}
 
@@ -22,7 +24,7 @@ export class UserService {
 		return await this.userModel.findById(id)
 	}
 
-	async find() {
+	async find(dto: FindUserDto) {
 		
 	}
 }

@@ -1,11 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { CreateUserDto } from './dto/create.user.dto';
+import { FindUserDto } from './dto/find.user.dto';
 import { UserModel } from './user.model';
 
 @Controller('user')
 export class UserController {
 
 	@Post('create')
-	async create(@Body() dto: UserModel) {
+	async create(@Body() dto: CreateUserDto) {
 
 	}
 
@@ -15,7 +17,7 @@ export class UserController {
 	}
 
 	@Patch(':id')
-	async patch(@Param('id') id: string, @Body() dto: UserModel) {
+	async patch(@Param('id') id: string, @Body() dto: CreateUserDto) {
 
 	}
 
@@ -25,7 +27,7 @@ export class UserController {
 	}
 
 	@Post()
-	async find(@Body() dto: UserModel) {
+	async find(@Body() dto: FindUserDto) {
 
 	}
 }

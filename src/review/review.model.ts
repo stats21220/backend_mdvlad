@@ -18,7 +18,4 @@ export class ReviewModel extends TimeStamps {
 
 	@prop()
 	rating: number;
-
-	@prop()
-	createdAt: Date;
 }
