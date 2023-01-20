@@ -12,15 +12,15 @@ export class OrderService {
 	}
 
 	async delete(id: string) {
-		return await this.orderModel.findByIdAndDelete(id)
+		return await this.orderModel.findByIdAndDelete(id).exec()
 	}
 
 	async patch(id: string, dto: CreateOrderDto) {
-		return await this.orderModel.findByIdAndUpdate(id, dto)
+		return await this.orderModel.findByIdAndUpdate(id, dto).exec()
 	}
 
 	async get(id: string) {
-		return await this.orderModel.findById(id)
+		return await this.orderModel.findById(id).exec()
 	}
 
 	async find() {

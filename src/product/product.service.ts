@@ -12,15 +12,15 @@ export class ProductService {
 	}
 
 	async delete(id: string) {
-		return await this.productModel.findByIdAndDelete(id)
+		return await this.productModel.findByIdAndDelete(id).exec()
 	}
 
 	async patch(id: string, dto: CreateProductDto) {
-		return await this.productModel.findByIdAndUpdate(id, dto)
+		return await this.productModel.findByIdAndUpdate(id, dto).exec()
 	}
 
 	async get(id: string) {
-		return await this.productModel.findById(id)
+		return await this.productModel.findById(id).exec()
 	}
 
 	async find() {

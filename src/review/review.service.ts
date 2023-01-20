@@ -13,18 +13,18 @@ export class ReviewService {
 	}
 
 	async delete(id: string) {
-		return await this.subscribeModel.findByIdAndDelete(id)
+		return await this.subscribeModel.findByIdAndDelete(id).exec()
 	}
 
 	async patch(id: string, dto: CreateReviewDto) {
-		return await this.subscribeModel.findByIdAndUpdate(id, dto)
+		return await this.subscribeModel.findByIdAndUpdate(id, dto).exec()
 	}
 
 	async get(id: string) {
-		return await this.subscribeModel.findById(id)
+		return await this.subscribeModel.findById(id).exec()
 	}
 
-	async find() {
-		
+	async findByProductId(productId: string) {
+		return await this.subscribeModel.find({productId}).exec()
 	}
 }

@@ -12,15 +12,15 @@ export class PageProductsService {
 	}
 
 	async delete(id: string) {
-		return await this.pageProductsModel.findByIdAndDelete(id)
+		return await this.pageProductsModel.findByIdAndDelete(id).exec()
 	}
 
 	async patch(id: string, dto: CreatePageProductsDto) {
-		return await this.pageProductsModel.findByIdAndUpdate(id, dto)
+		return await this.pageProductsModel.findByIdAndUpdate(id, dto).exec()
 	}
 
 	async get(id: string) {
-		return await this.pageProductsModel.findById(id)
+		return await this.pageProductsModel.findById(id).exec()
 	}
 
 	async find() {

@@ -13,15 +13,15 @@ export class UserService {
 	}
 
 	async delete(id: string) {
-		return await this.userModel.findByIdAndDelete(id)
+		return await this.userModel.findByIdAndDelete(id).exec()
 	}
 
 	async patch(id: string, dto: CreateUserDto) {
-		return await this.userModel.findByIdAndUpdate(id, dto)
+		return await this.userModel.findByIdAndUpdate(id, dto).exec()
 	}
 
 	async get(id: string) {
-		return await this.userModel.findById(id)
+		return await this.userModel.findById(id).exec()
 	}
 
 	async find(dto: FindUserDto) {

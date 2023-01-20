@@ -12,7 +12,7 @@ export class AuthService {
 	}
 
 	async find(login: string) {
-		return await this.authModel.findById(login)
+		return await this.authModel.findById(login).exec()
 	}
 
 	async auth(dto: AuthDto) {
