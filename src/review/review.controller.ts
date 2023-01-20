@@ -43,6 +43,6 @@ export class ReviewController {
 
 	@Get(':id')
 	async find(@Param('id') id: string) {
-		return await this.reviewService.findByProductId
+		return await this.reviewService.findByProductId(id)
 	}
 }

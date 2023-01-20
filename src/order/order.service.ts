@@ -24,7 +24,7 @@ export class OrderService {
 		return await this.orderModel.findById(id).exec()
 	}
 
-	async find() {
+	// async find() {
 
-	}
+	// }
 }

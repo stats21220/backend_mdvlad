@@ -40,7 +40,7 @@ export class OrderController {
 		return getOrder
 	}
 
-	async find() { ///// подумать над реализацией
+	// async find() { ///// подумать над реализацией
 
-	}
+	// }
 }

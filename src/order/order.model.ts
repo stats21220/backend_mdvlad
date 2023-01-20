@@ -1,12 +1,12 @@
 import { prop } from "@typegoose/typegoose";
 import { Base, TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
 
-export type priceOrderKey = 'упак.' | 'шт.' | 'м2' | 'м3' 
+// export type priceOrderKey = 'упак.' | 'шт.' | 'м2' | 'м3' 
 
 export class PriceOrder {
 
 	@prop()
-	name: priceOrderKey;
+	name: string;
 
 	@prop()
 	value: number;
