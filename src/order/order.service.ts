@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { ModelType } from '@typegoose/typegoose/lib/types';
+import { OrderModel } from './order.model';
 
 @Injectable()
-export class OrderService {}
+export class OrderService {
+	constructor(@Inject(OrderModel) private readonly orderModel: ModelType<OrderModel>) {}
+}
