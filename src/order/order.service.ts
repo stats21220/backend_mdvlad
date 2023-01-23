@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 import { InjectModel } from 'nestjs-typegoose';
-import { CreateOrderDto } from './dto/create.order.dtp';
+import { CreateOrderDto } from './dto/create.order.dto';
 import { OrderModel } from './order.model';
 
 @Injectable()

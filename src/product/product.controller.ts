@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateProductDto, ProductCategoryLevelDto } from './dto/create-product.dto';
 import { ProductService } from './product.service';
 
@@ -7,6 +7,7 @@ export class ProductController {
 
 	constructor(private readonly productService: ProductService) {}
 
+	@UsePipes(new ValidationPipe())
 	@Post('create')
 	async create(@Body() dto: CreateProductDto) {
 		return await this.productService.create(dto)
@@ -21,6 +22,7 @@ export class ProductController {
 		return deleteProduct
 	}
 
+	@UsePipes(new ValidationPipe())
 	@Patch(':id')
 	async patch(@Param('id') id: string, @Body() dto: CreateProductDto) {
 		const updateProduct = await this.productService.patch(id, dto)

@@ -25,6 +25,8 @@ export class PageCategoryLevel {
 	fifth?:  PageCategoryItem;
 }
 
+
+/////////////////////////////////////////////////
 export interface PageProductsModel extends Base {}
 export class PageProductsModel extends TimeStamps {
 
@@ -43,6 +45,4 @@ export class PageProductsModel extends TimeStamps {
 	@prop()
 	route?: string;
 
-	@prop()
-	parentId: number;
 }

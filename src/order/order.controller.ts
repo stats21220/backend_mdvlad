@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post } from '@nestjs/common';
-import { CreateOrderDto } from './dto/create.order.dtp';
+import { CreateOrderDto } from './dto/create.order.dto';
 import { ORDER_NOT_FOUND } from './order.constants';
 import { OrderModel } from './order.model';
 import { OrderService } from './order.service';
