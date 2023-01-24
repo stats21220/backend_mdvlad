@@ -12,7 +12,13 @@ export class PageCategoryItemDto {
 
 }
 
-export class PageCategoryLevelDto {
+export class LevelFirstPageDto {
+
+	@ValidateNested()
+	@Type(() => PageCategoryItemDto)
+
+	@ValidateNested()
+	@Type(() => PageCategoryItemDto)
 
 	@ValidateNested()
 	@Type(() => PageCategoryItemDto)
@@ -20,15 +26,15 @@ export class PageCategoryLevelDto {
 
 	@ValidateNested()
 	@Type(() => PageCategoryItemDto)
-	second?: PageCategoryItemDto;
+	second: PageCategoryItemDto | undefined;
 
 	@ValidateNested()
 	@Type(() => PageCategoryItemDto)
-	third?: PageCategoryItemDto;
+	third: PageCategoryItemDto | undefined;
 
 	@ValidateNested()
 	@Type(() => PageCategoryItemDto)
-	fifth?:  PageCategoryItemDto;
+	fifth: PageCategoryItemDto | undefined;
 }
 
 export class CreatePageProductsDto {
@@ -43,8 +49,8 @@ export class CreatePageProductsDto {
 	description: string;
 
 	@ValidateNested()
-	@Type(() => PageCategoryLevelDto)
-	catgory: PageCategoryLevelDto;
+	@Type(() => LevelFirstPageDto)
+	catgory: LevelFirstPageDto;
 
 	@IsOptional()
 	@IsString({message: 'Путь страницы должен быть строкой'})
