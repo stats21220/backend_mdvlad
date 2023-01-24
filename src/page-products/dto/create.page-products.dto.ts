@@ -44,7 +44,7 @@ export class CreatePageProductsDto {
 
 	@ValidateNested()
 	@Type(() => LevelPageDto)
-	catgory: LevelPageDto;
+	categories: LevelPageDto;
 
 	@IsOptional()
 	@IsString({message: 'Путь страницы должен быть строкой'})

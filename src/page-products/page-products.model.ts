@@ -42,7 +42,7 @@ export class PageProductsModel extends TimeStamps {
 	description: string;
 
 	@prop({index:true, type: () => LevelPage})
-	catgory: LevelPage;
+	categories: LevelPage;
 
 	@prop()
 	route?: string;

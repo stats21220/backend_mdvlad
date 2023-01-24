@@ -10,7 +10,6 @@ export class PageProductsController {
 	@UsePipes(new ValidationPipe())
 	@Post('create')
 	async create(@Body() dto: CreatePageProductsDto) {
-		console.log(dto);
 		
 		return await this.pageProductsService.create(dto)
 	}
