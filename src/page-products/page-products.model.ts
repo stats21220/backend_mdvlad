@@ -11,20 +11,20 @@ export class PageCategoryItem {
 }
 
 
-export class LevelFirstPage {
+export class LevelPage {
 
 	@prop({type: () => PageCategoryItem})
 	first: PageCategoryItem;
 
-	@prop()
-	second: PageCategoryItem | undefined
+	@prop({type: () => PageCategoryItem})
+	second?: PageCategoryItem | {}
 
- 	@prop()
-	third: PageCategoryItem | undefined
+	@prop({type: () => PageCategoryItem})
+	third?: PageCategoryItem | {}
 
-	@prop()
-	fifth: PageCategoryItem | undefined
-}
+	@prop({type: () => PageCategoryItem})
+	fifth?: PageCategoryItem | {}
+} 
 
 
 
@@ -41,8 +41,8 @@ export class PageProductsModel extends TimeStamps {
 	@prop()
 	description: string;
 
-	@prop({index:true, type: () => LevelFirstPage})
-	catgory: LevelFirstPage;
+	@prop({index:true, type: () => LevelPage})
+	catgory: LevelPage;
 
 	@prop()
 	route?: string;

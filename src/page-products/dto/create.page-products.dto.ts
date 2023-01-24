@@ -1,7 +1,7 @@
 import { Type } from "class-transformer";
 import { IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
 
-export class PageCategoryItemDto {
+export class PageLevelItemDto {
 
 	@IsString({message: 'Название категории должно быть строкой'})
 	level: string;
@@ -12,29 +12,23 @@ export class PageCategoryItemDto {
 
 }
 
-export class LevelFirstPageDto {
+export class LevelPageDto {
 
 	@ValidateNested()
-	@Type(() => PageCategoryItemDto)
+	@Type(() => PageLevelItemDto)
+	first: PageLevelItemDto;
 
 	@ValidateNested()
-	@Type(() => PageCategoryItemDto)
+	@Type(() => PageLevelItemDto)
+	second?: PageLevelItemDto;
 
 	@ValidateNested()
-	@Type(() => PageCategoryItemDto)
-	first: PageCategoryItemDto;
+	@Type(() => PageLevelItemDto)
+	third?: PageLevelItemDto;
 
 	@ValidateNested()
-	@Type(() => PageCategoryItemDto)
-	second: PageCategoryItemDto | undefined;
-
-	@ValidateNested()
-	@Type(() => PageCategoryItemDto)
-	third: PageCategoryItemDto | undefined;
-
-	@ValidateNested()
-	@Type(() => PageCategoryItemDto)
-	fifth: PageCategoryItemDto | undefined;
+	@Type(() => PageLevelItemDto)
+	fifth?: PageLevelItemDto;
 }
 
 export class CreatePageProductsDto {
@@ -49,8 +43,8 @@ export class CreatePageProductsDto {
 	description: string;
 
 	@ValidateNested()
-	@Type(() => LevelFirstPageDto)
-	catgory: LevelFirstPageDto;
+	@Type(() => LevelPageDto)
+	catgory: LevelPageDto;
 
 	@IsOptional()
 	@IsString({message: 'Путь страницы должен быть строкой'})
