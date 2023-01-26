@@ -36,6 +36,9 @@ export class PageProductsModel extends TimeStamps {
 	pageId: number;
 
 	@prop()
+	sortId?: number
+
+	@prop()
 	title: string;
 
 	@prop()
@@ -47,4 +50,9 @@ export class PageProductsModel extends TimeStamps {
 	@prop()
 	route?: string;
 
+	@prop()
+	parentRoute?: string
+
+	@prop()
+	parentTitle?: string
 }

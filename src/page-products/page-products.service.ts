@@ -13,58 +13,92 @@ export class PageProductsService {
 		return await this.pageProductsModel.create(createLevel(dto));
 	};
 
-	async delete(pageId: number) {
+	async delete(pageId: string) {
+		
 		return await this.pageProductsModel.findByIdAndDelete(pageId).exec();
 	};
 
-	async patch(pageId: number, dto: CreatePageProductsDto) {
-		return await this.pageProductsModel.findByIdAndUpdate(pageId, createLevel(dto)).exec();
+	async patch(pageId: string, dto: CreatePageProductsDto) {
+		return await this.pageProductsModel.findByIdAndUpdate(pageId, createLevel(dto), {new: true}).exec();
 	};
 
-	async get(pageId: number) {
+	async get(pageId: string) {
 		return await this.pageProductsModel.findById(pageId).exec();
 	};
 
 	async find() {
-		
+		const firstLevel = await this.pageProductsModel.aggregate()
+			.match({})
+			.sort({parentLevel: 1})
+
+			// .group({
+			// 	_id: {title: '$parentTitle', route: '$parentRoute'},
+			// 	subLevel: {$push: {route: '$route', title: '$title'}}
+			// })
+			.project({
+				_id: 0,
+				title: '$title',
+				route: '$route',
+				parentRoute: '$parentRoute' 
+			})
+		return firstLevel
 	};
 };
 
 const createLevel = (dto: CreatePageProductsDto) => {
-		const level1 = translitForUrl('/' + dto.categories.first.level);
-		dto.categories.first.route = level1;
-		dto.route = level1;
+		/// 1 level
+		const level = translitForUrl('/' + dto.categories.first.level);
+		dto.categories.first.route = level;
+		dto.route = level;
+		dto.parentRoute = '/';
+		dto.parentTitle = 'Главная';
 		
+
+		/// 2 Level
 		//// обработка оcategoriesшибки 2 уровня
 		if (!dto.categories.second && dto.categories.third) {
 			throw new HttpException('пропущен 2 уровень категории', HttpStatus.BAD_REQUEST);
 		} 
 		//// если все хорошо на 2 уровне
 		else if (dto.categories.second) {
-			const level2 = dto.categories.first.route +  translitForUrl('/' + dto.categories.second?.level);
-			dto.categories.second.route = level2;
-			dto.route = level2;
+			const level = dto.categories.first.route +  translitForUrl('/' + dto.categories.second?.level);
+			const parentLevel = dto.categories.first.route;
+			const parentTitle = dto.categories.first.level
+			dto.parentTitle = parentTitle;
+			dto.categories.second.route = level;
+			dto.parentRoute = parentLevel;
+			dto.route = level;
 		} else {
 			dto.categories.second = undefined;
 		};
 
+		/// 3 Level
 		//// обработка 3 уровня
 		if (!dto.categories.third && dto.categories.fifth) {
 			throw new HttpException('пропущен 3 уровень категории', HttpStatus.BAD_REQUEST);
 		}
 		//// если все хорошо на 3 уровне
 		else if (dto.categories.second && dto.categories.third) {
-				const level3 = dto.categories.second.route + translitForUrl('/' + dto.categories.third.level);
-				dto.categories.third.level = level3;
-				dto.route = level3;
+				const level = dto.categories.second.route + translitForUrl('/' + dto.categories.third.level);
+				const parentLevel = dto.categories.second.route;
+				const parentTitle = dto.categories.second.level;
+				dto.parentTitle = parentTitle;
+				dto.categories.third.route = level;
+				dto.parentRoute = parentLevel;
+				dto.route = level;
 		} else {
 			dto.categories.third = undefined;
 		};
 
-		if (dto.categories.third && dto.categories.fifth) {
-				const level4 = dto.categories.third.route + translitForUrl('/' + dto.categories.fifth.level);
-				dto.categories.fifth.level = level4;
-				dto.route = level4;
+		/// 4 level
+		if (dto.categories.second && dto.categories.third && dto.categories.fifth) {
+				const level = dto.categories.third.level + translitForUrl('/' + dto.categories.fifth.level);
+				const parentLevel = dto.categories.third.route;
+				const parentTitle = dto.categories.third.level;
+				dto.parentRoute = parentLevel;
+				dto.parentTitle = parentTitle;
+				dto.categories.fifth.route = level;
+				dto.route = level;
 		} else {
 			dto.categories.fifth = undefined;
 		};

@@ -1,5 +1,20 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateProductDto, ProductCategoryLevelDto } from './dto/create-product.dto';
+import { 
+	Body, 
+	Controller, 
+	Delete, 
+	Get, 
+	HttpException, 
+	HttpStatus, 
+	Param, 
+	Patch, 
+	Post, 
+	UseGuards, 
+	UsePipes, 
+	ValidationPipe 
+} from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { CreateProductDto} from './dto/create-product.dto';
+import { FindProductCategoryDto } from './dto/find-product.dto';
 import { ProductService } from './product.service';
 
 @Controller('product')
@@ -7,12 +22,14 @@ export class ProductController {
 
 	constructor(private readonly productService: ProductService) {}
 
+	@UseGuards(JwtAuthGuard)
 	@UsePipes(new ValidationPipe())
 	@Post('create')
 	async create(@Body() dto: CreateProductDto) {
 		return await this.productService.create(dto)
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Delete(':id')
 	async delete(@Param('id') id: string) {
 		const deleteProduct = await this.productService.delete(id)
@@ -22,6 +39,7 @@ export class ProductController {
 		return deleteProduct
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@UsePipes(new ValidationPipe())
 	@Patch(':id')
 	async patch(@Param('id') id: string, @Body() dto: CreateProductDto) {
@@ -41,8 +59,8 @@ export class ProductController {
 		return getProduct
 	}
 
-	// @Post()
-	// async find(@Body() dto: ProductCategoryLevelDto) {
-	// 	return await this.productService.find(dto)
-	// }
+	@Post('find')
+	async find(@Body() dto: FindProductCategoryDto) {
+		return await this.productService.find(dto)
+	}
 }

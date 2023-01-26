@@ -3,6 +3,7 @@ import { ModelType } from '@typegoose/typegoose/lib/types';
 import { InjectModel } from 'nestjs-typegoose';
 import { translitForUrl } from 'translit-npm';
 import { CreateProductDto } from './dto/create-product.dto';
+import { FindProductCategoryDto } from './dto/find-product.dto';
 import { ProductModel } from './product.model';
 
 
@@ -30,9 +31,11 @@ export class ProductService {
 		return await this.productModel.findById(id).exec()
 	}
 
-	// async find() {
-		
-	// }
+	async find(dto: FindProductCategoryDto) {
+		const products = await  this.productModel.aggregate()
+			.match({categories: dto})
+		return products
+	}
 }
 
 

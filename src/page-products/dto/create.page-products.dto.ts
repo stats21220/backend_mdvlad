@@ -36,6 +36,10 @@ export class CreatePageProductsDto {
 	@IsNumber()
 	pageId: number;
 
+	@IsOptional()
+	@IsNumber()
+	sortId?: number;
+
 	@IsString({message: 'Название страницы должно быть строкой'})
 	title: string;
 
@@ -49,4 +53,12 @@ export class CreatePageProductsDto {
 	@IsOptional()
 	@IsString({message: 'Путь страницы должен быть строкой'})
 	route?: string;
+
+	@IsOptional()
+	@IsString({message: 'Путь страницы должен быть строкой'})
+	parentRoute?: string;
+
+	@IsOptional()
+	@IsString({message: 'Путь страницы должен быть строкой'})
+	parentTitle?: string;
 }

@@ -58,10 +58,7 @@ export class ProductModel extends TimeStamps {
 	image: string;
 
 	@prop()
-	calculatedRating: number;
-
-	@prop()
-	title: number;
+	title: string;
 
 	@prop()
 	route?: string;
@@ -79,7 +76,7 @@ export class ProductModel extends TimeStamps {
 	tags: string[];
 
 	@prop({type: () => [Productcharacteeristics]})
-	characteeristics: Productcharacteeristics[];
+	characteristics: Productcharacteeristics[];
 
 	@prop()
 	count: number;

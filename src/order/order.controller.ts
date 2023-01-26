@@ -1,18 +1,31 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import { 
+	Body, 
+	Controller, 
+	Delete, 
+	Get, 
+	HttpException, 
+	HttpStatus, 
+	Param, 
+	Patch, 
+	Post, 
+	UseGuards 
+} from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { CreateOrderDto } from './dto/create.order.dto';
 import { ORDER_NOT_FOUND } from './order.constants';
-import { OrderModel } from './order.model';
 import { OrderService } from './order.service';
 
 @Controller('order')
 export class OrderController {
 	constructor(private readonly orderService: OrderService) {}
 
+	@UseGuards(JwtAuthGuard)
 	@Post('create')
 	async create(@Body() dto: CreateOrderDto) {
 		return await this.orderService.create(dto)
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Delete(':id')
 	async delete(@Param('id') id: string) {
 		const deleteOrder = await this.orderService.delete(id)
@@ -22,6 +35,7 @@ export class OrderController {
 		return deleteOrder
 	}
 
+	@UseGuards(JwtAuthGuard)
 	@Patch(':id')
 	async patch(@Param('id') id: string, @Body() dto: CreateOrderDto) {
 		const updateOrder = await this.orderService.patch(id, dto)

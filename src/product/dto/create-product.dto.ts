@@ -54,6 +54,10 @@ export class ProductCategoryLevelDto {
 	fifth?:  ProductCategoryItemDto;
 }
 
+
+
+
+/////////////////////
 export class CreateProductDto {
 
 	@IsNumber()
@@ -62,14 +66,8 @@ export class CreateProductDto {
 	@IsString()
 	image: string;
 
-	@IsOptional()
-	@Max(5, {message: 'Рейтинг должен быть не больше 5'})
-	@Min(0, {message: 'Рейтинг должен быть не меньше 0'})
-	@IsNumber({}, {message: 'Рейтинг должен быть числом'})
-	calculatedRating?: number;
-
-	@IsNumber()
-	title: number;
+	@IsString()
+	title: string;
 
 	@IsOptional()
 	@IsString({message: 'Главный роут страницы дожен быть строкой'})
@@ -83,7 +81,7 @@ export class CreateProductDto {
 
 	@ValidateNested()
 	@Type(() => ProductCharacteeristicsDto)
-	characteeristics: ProductCharacteeristicsDto;
+	characteristics: ProductCharacteeristicsDto;
 
 	@IsNumber({}, {message: 'Количевство продукта дожно быть числом'})
 	count: number;
