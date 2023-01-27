@@ -14,7 +14,8 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { CreateProductDto} from './dto/create-product.dto';
-import { FindProductCategoryDto } from './dto/find-product.dto';
+import { findProductDto } from './dto/find-product.dto';
+import { PRODUCT_NOT_FOUND } from './product.constants';
 import { ProductService } from './product.service';
 
 @Controller('product')
@@ -59,8 +60,9 @@ export class ProductController {
 		return getProduct
 	}
 
+	@UsePipes(new ValidationPipe())
 	@Post('find')
-	async find(@Body() dto: FindProductCategoryDto) {
+	async find(@Body() dto: findProductDto) {
 		return await this.productService.find(dto)
 	}
 }

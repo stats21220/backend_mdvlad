@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import {IsArray, IsNumber, IsNumberString, IsOptional, IsString, max, Max, Min, ValidateNested} from 'class-validator'
+import { COUNT_PRODUCT_NOT_NUMBER, MAIN_ROUTE_ERROR, TAGS_ROUTE_NOT_ARRAY_STRING } from '../product.constants';
 
 export class PriceProductDto {
 	
@@ -9,7 +10,7 @@ export class PriceProductDto {
 	@IsNumber({}, {message: 'Цена должна быть числом'})
 	value: number;
 
-	@IsNumber({}, {message: 'Количество должно быть числом'})
+	@IsNumber({}, {message: COUNT_PRODUCT_NOT_NUMBER})
 	count: number;
 }
 
@@ -70,20 +71,25 @@ export class CreateProductDto {
 	title: string;
 
 	@IsOptional()
-	@IsString({message: 'Главный роут страницы дожен быть строкой'})
+	@IsString({message: MAIN_ROUTE_ERROR})
 	route?: string;
+
+	@ValidateNested()
+	@Type(() => ProductCategoryLevelDto)
 	categories: ProductCategoryLevelDto;
+
 	price: PriceProductDto[];
 	oldPrice?: PriceProductDto[];
 
-	@IsString({each: true, message:'Теги должны быть массивом строк'})
-	tags: string[];
+	@IsOptional()
+	@IsString({each: true, message: TAGS_ROUTE_NOT_ARRAY_STRING})
+	tagsRoute?: string[];
 
 	@ValidateNested()
 	@Type(() => ProductCharacteeristicsDto)
 	characteristics: ProductCharacteeristicsDto;
 
-	@IsNumber({}, {message: 'Количевство продукта дожно быть числом'})
+	@IsNumber({}, {message: COUNT_PRODUCT_NOT_NUMBER})
 	count: number;
 
 

@@ -3,7 +3,7 @@ import { ModelType } from '@typegoose/typegoose/lib/types';
 import { InjectModel } from 'nestjs-typegoose';
 import { translitForUrl } from 'translit-npm';
 import { CreateProductDto } from './dto/create-product.dto';
-import { FindProductCategoryDto } from './dto/find-product.dto';
+import { findProductDto } from './dto/find-product.dto';
 import { ProductModel } from './product.model';
 
 
@@ -31,18 +31,23 @@ export class ProductService {
 		return await this.productModel.findById(id).exec()
 	}
 
-	async find(dto: FindProductCategoryDto) {
+	
+	///// подумай над тегами 
+	async find(dto:findProductDto) {
 		const products = await  this.productModel.aggregate()
-			.match({categories: dto})
+			.match({tagsRoute: {$all: dto.route}})
+			.project({tags: '$tagsRoute'})
 		return products
 	}
 }
 
 
 const createLevel = (dto: CreateProductDto) => {
-			const level1 = translitForUrl('/' + dto.categories.first.level);
+		const level1 = translitForUrl('/' + dto.categories.first.level);
 		dto.categories.first.route = level1;
 		dto.route = level1;
+		dto.tagsRoute = [];
+		dto.tagsRoute?.push(level1);
 		
 		//// обработка ошибки 2 уровня
 		if (!dto.categories.second && dto.categories.third) {
@@ -53,6 +58,7 @@ const createLevel = (dto: CreateProductDto) => {
 			const level2 = dto.categories.first.route +  translitForUrl('/' + dto.categories.second?.level);
 			dto.categories.second.route = level2;
 			dto.route = level2;
+			dto.tagsRoute.push(level2)
 		} else {
 			dto.categories.second = undefined;
 		};
@@ -64,16 +70,18 @@ const createLevel = (dto: CreateProductDto) => {
 		//// если все хорошо на 3 уровне
 		else if (dto.categories.second && dto.categories.third) {
 				const level3 = dto.categories.second.route + translitForUrl('/' + dto.categories.third.level);
-				dto.categories.third.level = level3;
+				dto.categories.third.route = level3;
 				dto.route = level3;
+				dto.tagsRoute.push(level3)
 		} else {
 			dto.categories.third = undefined;
 		};
 
 		if (dto.categories.third && dto.categories.fifth) {
 				const level4 = dto.categories.third.route + translitForUrl('/' + dto.categories.fifth.level);
-				dto.categories.fifth.level = level4;
+				dto.categories.fifth.route = level4;
 				dto.route = level4;
+				dto.tagsRoute.push(level4)
 		} else {
 			dto.categories.fifth = undefined;
 		};
