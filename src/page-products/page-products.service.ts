@@ -40,7 +40,7 @@ export class PageProductsService {
 				title: '$title',
 				route: '$route',
 				parentRoute: '$parentRoute' 
-			})
+			}).exec();
 		return firstLevel
 	};
 };

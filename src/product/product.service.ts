@@ -23,7 +23,7 @@ export class ProductService {
 	/////////////////// обновление продукта
 	async patch(id: string, dto: CreateProductDto) {
 
-		return await this.productModel.findByIdAndUpdate(id, createLevel(dto)).exec()
+		return await this.productModel.findByIdAndUpdate(id, createLevel(dto), {new: true}).exec()
 	}
 	////////////////// конец обновления продукта
 
@@ -36,7 +36,7 @@ export class ProductService {
 	async find(dto:findProductDto) {
 		const products = await  this.productModel.aggregate()
 			.match({tagsRoute: {$all: dto.route}})
-			.project({tags: '$tagsRoute'})
+			.project({tags: '$tagsRoute'}).exec();
 		return products
 	}
 }
