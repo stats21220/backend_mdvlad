@@ -1,5 +1,5 @@
 
-import { IsString, IsNumber, IsOptional } from "class-validator";
+import { IsString, IsNumber, IsOptional } from 'class-validator';
 
 // export type priceOrderKey = 'упак.' | 'шт.' | 'м2' | 'м3' 
 

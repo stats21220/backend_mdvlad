@@ -2,5 +2,5 @@
 
 export interface FindUserDto {
 
-	firstName: string
+	firstName: string;
 }

@@ -7,7 +7,7 @@ export class PageCategoryItem {
 	level: string;
 
 	@prop()
-	route?: string
+	route?: string;
 }
 
 
@@ -17,13 +17,13 @@ export class LevelPage {
 	first: PageCategoryItem;
 
 	@prop({type: () => PageCategoryItem})
-	second?: PageCategoryItem | {}
+	second?: PageCategoryItem | {};
 
 	@prop({type: () => PageCategoryItem})
-	third?: PageCategoryItem | {}
+	third?: PageCategoryItem | {};
 
 	@prop({type: () => PageCategoryItem})
-	fifth?: PageCategoryItem | {}
+	fifth?: PageCategoryItem | {};
 } 
 
 
@@ -36,7 +36,7 @@ export class PageProductsModel extends TimeStamps {
 	pageId: number;
 
 	@prop()
-	sortId?: number
+	sortId?: number;
 
 	@prop()
 	title: string;
@@ -51,8 +51,8 @@ export class PageProductsModel extends TimeStamps {
 	route?: string;
 
 	@prop()
-	parentRoute?: string
+	parentRoute?: string;
 
 	@prop()
-	parentTitle?: string
+	parentTitle?: string;
 }

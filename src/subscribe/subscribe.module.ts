@@ -6,12 +6,12 @@ import { SubscribeService } from './subscribe.service';
 
 @Module({
   imports: [
-    TypegooseModule.forFeature([{
-      typegooseClass: SubscribeModel,
-      schemaOptions: {
-        collection: 'Subscribe'
-      }
-    }])
+	TypegooseModule.forFeature([{
+		typegooseClass: SubscribeModel,
+		schemaOptions: {
+		collection: 'Subscribe'
+		}
+	}])
   ],
   controllers: [SubscribeController],
   providers: [SubscribeService]

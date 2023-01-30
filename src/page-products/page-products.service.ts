@@ -20,7 +20,7 @@ export class PageProductsService {
 	};
 
 	async patch(pageId: string, dto: CreatePageProductsDto) {
-		return await this.pageProductsModel.findByIdAndUpdate(pageId, createLevel(dto), {new: true}).exec();
+		return await this.pageProductsModel.findByIdAndUpdate(pageId, createLevel(dto), {new:true}).exec();
 	};
 
 	async get(pageId: string) {
@@ -31,10 +31,11 @@ export class PageProductsService {
 		const nextLevel = await this.pageProductsModel.aggregate()
 			.match({parentRoute: dto.nextLevel})
 			.sort({sortId: 1})
-			.group({_id: '$parentTitle',
+			.group({_id: {title: '$parentTitle', route: '$parentRoute'},
 					nextLevel: {$push: {title: '$title', route: '$route'}}})
+			.project({_id: 0, level: '$_id.title',route: '$_id.route', nextLevel: '$nextLevel'})
 			.exec();
-		return nextLevel
+	return nextLevel[0]
 	};
 };
 
@@ -62,7 +63,7 @@ const createLevel = (dto: CreatePageProductsDto) => {
 			dto.parentRoute = parentLevel;
 			dto.route = level;
 		} else {
-			dto.categories.second = undefined;
+			dto.categoriessecond = undefined;
 		};
 
 		/// 3 Level

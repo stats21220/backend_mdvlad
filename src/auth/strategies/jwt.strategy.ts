@@ -12,10 +12,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 			ignoreExpiration: true,
 			secretOrKey: configService.get('JWT_SECRET')
 		});
-	};
+	}
 
 	async validate({email}: Pick<AuthModel, 'email'>) {
 		return email;
-	};
+	}
 
-};
+}

@@ -8,7 +8,7 @@ export class PageLevelItemDto {
 
 	@IsOptional()
 	@IsString({message: 'Значение роута категории должно быть строкой'})
-	route?: string
+	route?: string;
 
 }
 
@@ -61,4 +61,5 @@ export class CreatePageProductsDto {
 	@IsOptional()
 	@IsString({message: 'Путь страницы должен быть строкой'})
 	parentTitle?: string;
+	categoriessecond: undefined;
 }

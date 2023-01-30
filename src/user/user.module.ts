@@ -6,12 +6,12 @@ import { UserService } from './user.service';
 
 @Module({
   imports: [
-    TypegooseModule.forFeature([{
-      typegooseClass: UserModel,
-      schemaOptions: {
-        collection: 'User'
-      }
-    }])
+	TypegooseModule.forFeature([{
+		typegooseClass: UserModel,
+		schemaOptions: {
+		collection: 'User'
+		}
+	}])
   ],
   controllers: [UserController],
   providers: [UserService]

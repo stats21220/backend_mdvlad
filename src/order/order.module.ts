@@ -6,12 +6,12 @@ import { OrderService } from './order.service';
 
 @Module({
   imports: [
-    TypegooseModule.forFeature([{
-      typegooseClass: OrderModel,
-      schemaOptions: {
-        collection: 'Order'
-      }
-    }])
+	TypegooseModule.forFeature([{
+		typegooseClass: OrderModel,
+		schemaOptions: {
+		collection: 'Order'
+		}
+	}])
   ],
   controllers: [OrderController],
   providers: [OrderService]

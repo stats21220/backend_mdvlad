@@ -1,5 +1,5 @@
-import { prop } from "@typegoose/typegoose";
-import { Base, TimeStamps } from "@typegoose/typegoose/lib/defaultClasses";
+import { prop } from '@typegoose/typegoose';
+import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 
 // export type priceOrderKey = 'упак.' | 'шт.' | 'м2' | 'м3' 
 

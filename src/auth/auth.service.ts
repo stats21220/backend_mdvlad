@@ -15,10 +15,10 @@ export class AuthService {
 
 	async create(dto: AuthDto) {
 
-		const oldRegister = await this.find(dto.login)
+		const oldRegister = await this.find(dto.login);
 
 		if (oldRegister) {
-			throw new HttpException(ALREADY_REGISTEERED_ERROR, HttpStatus.BAD_REQUEST)
+			throw new HttpException(ALREADY_REGISTEERED_ERROR, HttpStatus.BAD_REQUEST);
 		}
 
 		const salt = await genSalt(10);
@@ -26,7 +26,7 @@ export class AuthService {
 		const newAuth = {
 			email: dto.login,
 			passwordHash: await hash(dto.password, salt)
-		}
+		};
 
 		return await this.authModel.create(newAuth);
 	};
