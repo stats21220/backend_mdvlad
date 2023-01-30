@@ -16,6 +16,7 @@ import {
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { IdValidationPipe } from 'src/pipes/id-validation.pipe';
 import { CreatePageProductsDto } from './dto/create.page-products.dto';
+import { FindNextLevelDto } from './dto/findNextLevel.page-products.dto';
 import { PAGE_PRODUCTS_NOT_FOUND } from './page-products.constants';
 import { PageProductsService } from './page-products.service';
 
@@ -61,8 +62,17 @@ export class PageProductsController {
 		return getPageProducts
 	}
 
-	@Get()
-	async find() { ///// подумать над реализацией
-		return await this.pageProductsService.find()
+	@UsePipes(new ValidationPipe())
+	@Post('find')
+	async find(@Body() dto: FindNextLevelDto) { ///// подумать над реализацией
+		if (!dto.nextLevel) {
+			dto.nextLevel = '/'
+		}
+		const reg = /\//g
+		const nextLevelValidation = dto.nextLevel && dto.nextLevel.match(reg)
+		if (!nextLevelValidation) {
+			throw new HttpException('не валидный роут следущего уровня страниц', HttpStatus.BAD_REQUEST);
+		}
+		return await this.pageProductsService.find(dto)
 	}
 }
