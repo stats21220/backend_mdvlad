@@ -1,8 +1,8 @@
-FROM node:19-alpine3.16
+FROM node:19-alpine
 WORKDIR /opt/app
 ADD package.json package.json
 RUN npm install --force
 ADD . .
 RUN npm run build
-RUN npm prune --production
+# RUN npm prune --production
 CMD ["node", "./dist/main.js"]
