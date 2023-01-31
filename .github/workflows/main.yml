@@ -8,20 +8,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: docker/build-push-action@dckr_pat_Kofmcl79RWw7oIRR9L17QkwX6TQ
+      - uses: actions/checkout@master
+      - name: Publish to registy
+        uses: elgohr/Publish-Docker-Github-Action@master
         with:
-          context: .
-          file: ./Dockerfile
-          platforms: ${{ matrix.platforms }}
-          push: true
-          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=My multi-arch image
-#       - uses: actions/checkout@master
-#       - name: Publish to registy
-#         uses: elgohr/Publish-Docker-Github-Action@v4
-#         with:
-#           registry: docker.pkg.github.com
-#           name: docker.pkg.github.com/stats21220/backend_mdvlad/mdvlad
-#           username: ${{ secrets.DOCKER_USERNAME }}
-#           password: ${{ secrets.DOCKER_PASSWORD }}
-#           tags: 'develop'
-
+          registry: docker.pkg.github.com
+          name: docker.pkg.github.com/stats21220/backend_mdvlad/mdvlad
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          tags: 'develop'
