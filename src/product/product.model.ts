@@ -73,7 +73,7 @@ export class ProductModel extends TimeStamps {
 	oldPrice?: PriceProduct[];
 	
 	@prop({index:true})
-	tagsRoute?: string[];
+	categoriesRoute?: string[];
 
 	@prop({type: () => [Productcharacteeristics]})
 	characteristics: Productcharacteeristics[];

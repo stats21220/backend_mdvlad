@@ -1,8 +1,15 @@
-// import { Type } from "class-transformer";
-// import { IsString, IsOptional, ValidateNested } from "class-validator";
+import { IsString, IsArray } from "class-validator";
 
-import { IsNumber, IsOptional, IsString } from "class-validator";
-import { PRODUCT_FIND_NOT_ARRAY_STRING } from "../product.constants";
+export class FindProductDto {
+
+	@IsString({each: true})
+	category: string[];
+}
+
+
+
+// import { Type } from "class-transformer";
+// import { PRODUCT_FIND_NOT_ARRAY_STRING } from "../product.constants";
 
 // export class CategoryItemDto {
 
@@ -38,12 +45,28 @@ import { PRODUCT_FIND_NOT_ARRAY_STRING } from "../product.constants";
 // 	fifth?:  CategoryItemDto;
 // }
 
-export class findProductDto {
 
-	@IsString({each: true, message: PRODUCT_FIND_NOT_ARRAY_STRING})
-	route: string[];
 
-	@IsOptional()
-	@IsNumber()
-	limit?: number;
-};
+// export class findProductDto {
+
+// 	@IsOptional()
+// 	first?: string;
+
+// 	@IsOptional()
+// 	@IsString()
+// 	second?: string;
+
+// 	@IsOptional()
+// 	@IsString()
+// 	third?: string;
+
+// 	@IsOptional()
+// 	@IsString()
+// 	fifth?: string;
+// 	// @IsString({each: true, message: PRODUCT_FIND_NOT_ARRAY_STRING})
+// 	// route: string[];
+
+// 	// @IsOptional()
+// 	// @IsNumber()
+// 	// limit?: number;
+// };

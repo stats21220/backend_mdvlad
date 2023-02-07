@@ -3,7 +3,7 @@ import { ModelType } from '@typegoose/typegoose/lib/types';
 import { InjectModel } from 'nestjs-typegoose';
 import { translitForUrl } from 'translit-npm';
 import { CreateProductDto } from './dto/create-product.dto';
-import { findProductDto } from './dto/find-product.dto';
+import { FindProductDto } from './dto/find-product.dto';
 import { ProductModel } from './product.model';
 
 
@@ -33,21 +33,24 @@ export class ProductService {
 
 	
 	///// подумай над тегами 
-	async find(dto:findProductDto) {
-		const products = await  this.productModel.aggregate()
-			.match({tagsRoute: {$all: dto.route}})
-			.project({tags: '$tagsRoute'}).exec();
+	async find(dto: FindProductDto) {
+		const products = await this.productModel.aggregate()
+			.match({categoriesRoute: {$all: dto.category}})
+		// const products = await  this.productModel.aggregate()
+			// .match({tagsRoute: {$all: dto.route}})
+			// .project({tags: '$tagsRoute', }).exec();
 		return products
 	}
 }
 
 
 const createLevel = (dto: CreateProductDto) => {
-		const level1 = translitForUrl('/' + dto.categories.first.level);
+		dto.categoriesRoute = [];
+		const route = translitForUrl(dto.categories.first.level)
+		const level1 = '/' + route;
 		dto.categories.first.route = level1;
-		dto.route = level1;
-		dto.tagsRoute = [];
-		dto.tagsRoute?.push(level1);
+		dto.route = level1 + translitForUrl('/' + dto.title);
+		dto.categoriesRoute?.push(route)
 		
 		//// обработка ошибки 2 уровня
 		if (!dto.categories.second && dto.categories.third) {
@@ -55,10 +58,11 @@ const createLevel = (dto: CreateProductDto) => {
 		} 
 		//// если все хорошо на 2 уровне
 		else if (dto.categories.second) {
-			const level2 = dto.categories.first.route +  translitForUrl('/' + dto.categories.second?.level);
+			const route = translitForUrl(dto.categories.second.level)
+			const level2 = dto.categories.first.route + '/' + route;
 			dto.categories.second.route = level2;
-			dto.route = level2;
-			dto.tagsRoute.push(level2)
+			dto.route = level2 + translitForUrl('/' + dto.title);
+			dto.categoriesRoute?.push(route)
 		} else {
 			dto.categories.second = undefined;
 		};
@@ -69,19 +73,21 @@ const createLevel = (dto: CreateProductDto) => {
 		}
 		//// если все хорошо на 3 уровне
 		else if (dto.categories.second && dto.categories.third) {
-				const level3 = dto.categories.second.route + translitForUrl('/' + dto.categories.third.level);
+				const route = translitForUrl(dto.categories.third.level);
+				const level3 = dto.categories.second.route + '/' + route;
 				dto.categories.third.route = level3;
-				dto.route = level3;
-				dto.tagsRoute.push(level3)
+				dto.route = level3 + translitForUrl('/' + dto.title);
+				dto.categoriesRoute?.push(route)
 		} else {
 			dto.categories.third = undefined;
 		};
 
 		if (dto.categories.third && dto.categories.fifth) {
-				const level4 = dto.categories.third.route + translitForUrl('/' + dto.categories.fifth.level);
+				const route = translitForUrl(dto.categories.fifth.level);
+				const level4 = dto.categories.third.route + '/' + route;
 				dto.categories.fifth.route = level4;
-				dto.route = level4;
-				dto.tagsRoute.push(level4)
+				dto.route = level4 + translitForUrl('/' + dto.title);
+				dto.categoriesRoute?.push(route)
 		} else {
 			dto.categories.fifth = undefined;
 		};

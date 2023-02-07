@@ -83,7 +83,7 @@ export class CreateProductDto {
 
 	@IsOptional()
 	@IsString({each: true, message: TAGS_ROUTE_NOT_ARRAY_STRING})
-	tagsRoute?: string[];
+	categoriesRoute?: string[];
 
 	@ValidateNested()
 	@Type(() => ProductCharacteeristicsDto)

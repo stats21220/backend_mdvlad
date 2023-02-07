@@ -1,10 +1,10 @@
 version: '3'
 services:
   backend.mdvlad:
-    image: mdvlad:latest
-    container_name: backend-mdvlad
+    image: backend:latest
+    container_name: mdvlad
     restart: always
     ports: 
-      - 3000:3000
+      - 3100:3100
     volumes:
       - ./.env:/opt/app/.env

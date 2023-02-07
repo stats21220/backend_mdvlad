@@ -4,7 +4,6 @@ import { InjectModel } from 'nestjs-typegoose';
 import { CreatePageProductsDto } from './dto/create.page-products.dto';
 import { PageProductsModel } from './page-products.model';
 import {translitForUrl} from 'translit-npm';
-import { FindNextLevelDto } from './dto/findNextLevel.page-products.dto';
 
 @Injectable()
 export class PageProductsService {
@@ -27,15 +26,12 @@ export class PageProductsService {
 		return await this.pageProductsModel.findById(pageId).exec();
 	};
 
-	async find(dto: FindNextLevelDto) {
-		const nextLevel = await this.pageProductsModel.aggregate()
-			.match({parentRoute: dto.nextLevel})
-			.sort({sortId: 1})
-			.group({_id: {title: '$parentTitle', route: '$parentRoute'},
-					nextLevel: {$push: {title: '$title', route: '$route'}}})
-			.project({_id: 0, level: '$_id.title',route: '$_id.route', nextLevel: '$nextLevel'})
-			.exec();
-	return nextLevel[0]
+	async find() {
+		const pages = await this.pageProductsModel.aggregate()
+			.match({})
+			.group({_id: '$parentRoute',
+				pages: {$push: {_id: '$_id',title: '$title', sortId: '$sortId', route: '$route', description: '$description', pageId: '$pageId'}}})
+	return pages;
 	};
 };
 

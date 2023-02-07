@@ -15,7 +15,7 @@ import {
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { IdValidationPipe } from 'src/pipes/id-validation.pipe';
 import { CreateProductDto} from './dto/create-product.dto';
-import { findProductDto } from './dto/find-product.dto';
+import { FindProductDto } from './dto/find-product.dto';
 import { PRODUCT_NOT_FOUND } from './product.constants';
 import { ProductService } from './product.service';
 
@@ -63,7 +63,7 @@ export class ProductController {
 
 	@UsePipes(new ValidationPipe())
 	@Post('find')
-	async find(@Body() dto: findProductDto) {
+	async find(@Body() dto: FindProductDto) {
 		return await this.productService.find(dto)
 	}
 }

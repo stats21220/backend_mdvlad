@@ -1,8 +1,8 @@
 import { IsOptional, IsString } from 'class-validator';
 
-export class FindNextLevelDto {
+export class FindLevelDto {
 
 	@IsOptional()
 	@IsString()
-	nextLevel?: string;
+	category?: string;
 }
