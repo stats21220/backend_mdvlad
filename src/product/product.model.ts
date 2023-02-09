@@ -12,7 +12,7 @@ export class PriceProduct {
 	value: number;
 
 	@prop()
-	count: number;
+	count?: number;
 }
 
 export class Productcharacteeristics {
@@ -28,6 +28,9 @@ export class ProductCategoryItem {
 
 	@prop()
 	level: string;
+
+	@prop()
+	alias?: string
 
 	@prop()
 	route?: string
@@ -57,8 +60,11 @@ export class ProductModel extends TimeStamps {
 	@prop()
 	image: string;
 
-	@prop()
+	@prop({unique:true})
 	title: string;
+
+	@prop({unique:true})
+	alias?: string
 
 	@prop()
 	route?: string;

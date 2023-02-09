@@ -7,6 +7,10 @@ export class PageLevelItemDto {
 	level: string;
 
 	@IsOptional()
+	@IsString()
+	alias?: string;
+
+	@IsOptional()
 	@IsString({message: 'Значение роута категории должно быть строкой'})
 	route?: string;
 
@@ -42,6 +46,14 @@ export class CreatePageProductsDto {
 
 	@IsString({message: 'Название страницы должно быть строкой'})
 	title: string;
+
+	@IsOptional()
+	@IsString()
+	alias?: string;
+
+	@IsOptional()
+	@IsString({each: true})
+	categoriesRoute: string[]
 
 	@IsString({message: 'Описание страницы должно быть строкой'})
 	description: string;

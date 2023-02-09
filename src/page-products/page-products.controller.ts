@@ -3,8 +3,6 @@ import {
 	Controller, 
 	Delete, 
 	Get, 
-	HttpException, 
-	HttpStatus, 
 	NotFoundException, 
 	Param, 
 	Patch, 
@@ -43,25 +41,24 @@ export class PageProductsController {
 
 	@UseGuards(JwtAuthGuard)
 	@UsePipes(new ValidationPipe())
-	@Patch(':pageId')
-	async patch(@Param('pageId', IdValidationPipe) pageId: string, @Body() dto: CreatePageProductsDto) {
-		const updatePageProducts = await this.pageProductsService.patch(pageId, dto)
+	@Patch(':alias')
+	async patch(@Param('alias') alias: string, @Body() dto: CreatePageProductsDto) {
+		const updatePageProducts = await this.pageProductsService.patch(alias, dto)
 		if (!updatePageProducts) {
 			throw new NotFoundException(PAGE_PRODUCTS_NOT_FOUND)
 		}
 		return updatePageProducts
 	}
 
-	@Get(':pageId')
-	async get(@Param('pageId', IdValidationPipe) pageId: string) {
-		const getPageProducts = await this.pageProductsService.get(pageId)
+	@Get(':byAlias')
+	async get(@Param('byAlias') byAlias: string) {
+		const getPageProducts = await this.pageProductsService.get(byAlias)
 		if (!getPageProducts) {
 			throw new NotFoundException(PAGE_PRODUCTS_NOT_FOUND)
 		}
 		return getPageProducts
 	}
 
-	@UsePipes(new ValidationPipe())
 	@Post('find')
 	async find() { ///// подумать над реализацией
 		return await this.pageProductsService.find()

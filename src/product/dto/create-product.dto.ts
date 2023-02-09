@@ -10,8 +10,9 @@ export class PriceProductDto {
 	@IsNumber({}, {message: 'Цена должна быть числом'})
 	value: number;
 
+	@IsOptional()
 	@IsNumber({}, {message: COUNT_PRODUCT_NOT_NUMBER})
-	count: number;
+	count?: number;
 }
 
 export class ProductCharacteeristicsDto {
@@ -19,7 +20,8 @@ export class ProductCharacteeristicsDto {
 	@IsString({message: 'Название пункта характерестики дожен быть строкой'})
 	title: string;
 
-	@IsNumberString({}, {message: 'Значение пункта характеристики должен быть числом или строкой'})
+	@IsNumber({}, {message: 'Значение пункта характеристики должен быть числом или строкой'})
+	@IsString()
 	value: string | number;
 }
 
@@ -27,6 +29,10 @@ export class ProductCategoryItemDto {
 
 	@IsString({message: 'Название категории должно быть строкой'})
 	level: string;
+
+	@IsOptional()
+	@IsString()
+	alias?: string;
 
 	@IsOptional()
 	@IsString({message: 'Значение роута категории должно быть строкой'})
@@ -71,6 +77,10 @@ export class CreateProductDto {
 	title: string;
 
 	@IsOptional()
+	@IsString()
+	alias?: string
+
+	@IsOptional()
 	@IsString({message: MAIN_ROUTE_ERROR})
 	route?: string;
 
@@ -85,15 +95,15 @@ export class CreateProductDto {
 	@IsString({each: true, message: TAGS_ROUTE_NOT_ARRAY_STRING})
 	categoriesRoute?: string[];
 
-	@ValidateNested()
-	@Type(() => ProductCharacteeristicsDto)
-	characteristics: ProductCharacteeristicsDto;
+	// @ValidateNested({each: true})
+	// @Type(() => ProductCharacteeristicsDto)
+	characteristics: ProductCharacteeristicsDto[];
 
-	@IsNumber({}, {message: COUNT_PRODUCT_NOT_NUMBER})
+	@IsNumber()
 	count: number;
 
 
-	@IsNumber({}, {message: 'Вес продукта дожен быть числом'})
+	@IsNumber()
 	weight: number;
 
 	@IsOptional()

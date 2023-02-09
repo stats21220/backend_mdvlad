@@ -7,6 +7,9 @@ export class PageCategoryItem {
 	level: string;
 
 	@prop()
+	alias?: string;
+
+	@prop()
 	route?: string;
 }
 
@@ -38,8 +41,14 @@ export class PageProductsModel extends TimeStamps {
 	@prop()
 	sortId?: number;
 
-	@prop()
+	@prop({unique:true})
 	title: string;
+
+	@prop({unique:true})
+	alias?: string
+
+	@prop()
+	categoriesRoute?: string[]
 
 	@prop()
 	description: string;
@@ -50,7 +59,7 @@ export class PageProductsModel extends TimeStamps {
 	@prop()
 	route?: string;
 
-	@prop()
+	@prop({index:true})
 	parentRoute?: string;
 
 	@prop()

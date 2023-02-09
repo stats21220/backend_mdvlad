@@ -35,7 +35,22 @@ export class ProductService {
 	///// подумай над тегами 
 	async find(dto: FindProductDto) {
 		const products = await this.productModel.aggregate()
-			.match({categoriesRoute: {$all: dto.category}})
+			.match({categoriesRoute: dto.category})
+			.sort({weight: 1})
+			.limit(dto.limit)
+			.project({
+				_id: '$_id', 
+				productId: '$productId', 
+				image: '$image', 
+				title: '$title', 
+				alias: '$alias',
+				route: '$route',
+				price: '$price',
+				oldPrice: '$oldPrice',
+				categoriesRoute: '$categoriesRoute',
+				count: '$count',
+				weight: '$weight'
+			})
 		// const products = await  this.productModel.aggregate()
 			// .match({tagsRoute: {$all: dto.route}})
 			// .project({tags: '$tagsRoute', }).exec();
@@ -46,11 +61,13 @@ export class ProductService {
 
 const createLevel = (dto: CreateProductDto) => {
 		dto.categoriesRoute = [];
-		const route = translitForUrl(dto.categories.first.level)
-		const level1 = '/' + route;
+		dto.alias = translitForUrl(dto.title)
+		const alias = translitForUrl(dto.categories.first.level)
+		const level1 = '/' + alias;
 		dto.categories.first.route = level1;
+		dto.categories.first.alias = alias;
 		dto.route = level1 + translitForUrl('/' + dto.title);
-		dto.categoriesRoute?.push(route)
+		dto.categoriesRoute?.push(alias)
 		
 		//// обработка ошибки 2 уровня
 		if (!dto.categories.second && dto.categories.third) {
@@ -58,11 +75,12 @@ const createLevel = (dto: CreateProductDto) => {
 		} 
 		//// если все хорошо на 2 уровне
 		else if (dto.categories.second) {
-			const route = translitForUrl(dto.categories.second.level)
-			const level2 = dto.categories.first.route + '/' + route;
+			const alias = translitForUrl(dto.categories.second.level)
+			const level2 = dto.categories.first.route + '/' + alias;
 			dto.categories.second.route = level2;
+			dto.categories.second.alias = alias;
 			dto.route = level2 + translitForUrl('/' + dto.title);
-			dto.categoriesRoute?.push(route)
+			dto.categoriesRoute?.push(alias)
 		} else {
 			dto.categories.second = undefined;
 		};
@@ -73,21 +91,23 @@ const createLevel = (dto: CreateProductDto) => {
 		}
 		//// если все хорошо на 3 уровне
 		else if (dto.categories.second && dto.categories.third) {
-				const route = translitForUrl(dto.categories.third.level);
-				const level3 = dto.categories.second.route + '/' + route;
+				const alias = translitForUrl(dto.categories.third.level);
+				const level3 = dto.categories.second.route + '/' + alias;
 				dto.categories.third.route = level3;
+				dto.categories.third.alias = alias;
 				dto.route = level3 + translitForUrl('/' + dto.title);
-				dto.categoriesRoute?.push(route)
+				dto.categoriesRoute?.push(alias)
 		} else {
 			dto.categories.third = undefined;
 		};
 
 		if (dto.categories.third && dto.categories.fifth) {
-				const route = translitForUrl(dto.categories.fifth.level);
-				const level4 = dto.categories.third.route + '/' + route;
+				const alias = translitForUrl(dto.categories.fifth.level);
+				const level4 = dto.categories.third.route + '/' + alias;
 				dto.categories.fifth.route = level4;
+				dto.categories.fifth.alias = alias;
 				dto.route = level4 + translitForUrl('/' + dto.title);
-				dto.categoriesRoute?.push(route)
+				dto.categoriesRoute?.push(alias)
 		} else {
 			dto.categories.fifth = undefined;
 		};
