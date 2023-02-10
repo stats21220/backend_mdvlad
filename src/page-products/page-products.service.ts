@@ -14,8 +14,7 @@ export class PageProductsService {
 	};
 
 	async delete(pageId: string) {
-		
-		return await this.pageProductsModel.findByIdAndDelete(pageId).exec();
+		return await this.pageProductsModel.findOneAndDelete({alias: pageId}).exec();
 	};
 
 	async patch(alias: string, dto: CreatePageProductsDto) {
@@ -30,7 +29,17 @@ export class PageProductsService {
 		const pages = await this.pageProductsModel.aggregate()
 			.match({})
 			.group({_id: '$parentRoute',
-				pages: {$push: {_id: '$_id',title: '$title', sortId: '$sortId', route: '$route', alias: '$alias'}}})
+				pages: {$push: {
+					_id: '$_id',
+					title: '$title', 
+					sortId: '$sortId', 
+					route: '$route', 
+					alias: '$alias',
+					firstLevelAlias: '$categories.first.alias',
+					secondlLevelAlias: '$categories.second.alias',
+					thirdLevelAlias: '$categories.third.alias',
+					fifthLevelAlias: '$categories.fifth.alias',
+				}}})
 		return pages;
 	};
 };

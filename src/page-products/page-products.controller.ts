@@ -31,7 +31,7 @@ export class PageProductsController {
 
 	@UseGuards(JwtAuthGuard)
 	@Delete(':pageId')
-	async delete(@Param('pageId', IdValidationPipe) pageId: string) {
+	async delete(@Param('pageId') pageId: string) {
 		const deletePageProducts = await this.pageProductsService.delete(pageId)
 		if (!deletePageProducts) {
 			throw new NotFoundException(PAGE_PRODUCTS_NOT_FOUND)
