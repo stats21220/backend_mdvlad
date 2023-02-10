@@ -21,8 +21,8 @@ export class PageProductsService {
 		return await this.pageProductsModel.findOneAndUpdate({alias}, createLevel(dto), {new:true}).exec();
 	};
 
-	async get(alias: string) {
-		return await this.pageProductsModel.findOne({alias}).exec();
+	async getPage(dto: {route: string}) {
+		return await this.pageProductsModel.findOne({route: dto.route})
 	};
 
 	async find() {
@@ -42,6 +42,22 @@ export class PageProductsService {
 				}}})
 		return pages;
 	};
+
+	async findLevelPage(dto: {level: string}) {
+		return this.pageProductsModel.aggregate()
+			.match({parentRoute: dto.level})
+			.project({
+					_id: '$_id',
+					title: '$title', 
+					sortId: '$sortId', 
+					route: '$route', 
+					alias: '$alias',
+					firstLevelAlias: '$categories.first.alias',
+					secondlLevelAlias: '$categories.second.alias',
+					thirdLevelAlias: '$categories.third.alias',
+					fifthLevelAlias: '$categories.fifth.alias',
+			})
+	}
 };
 
 const createLevel = (dto: CreatePageProductsDto) => {

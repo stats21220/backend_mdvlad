@@ -50,9 +50,9 @@ export class PageProductsController {
 		return updatePageProducts
 	}
 
-	@Get(':byAlias')
-	async get(@Param('byAlias') byAlias: string) {
-		const getPageProducts = await this.pageProductsService.get(byAlias)
+	@Post('getPage')
+	async getPage(@Body() dto: {route: string} ) {
+		const getPageProducts = await this.pageProductsService.getPage(dto)
 		if (!getPageProducts) {
 			throw new NotFoundException(PAGE_PRODUCTS_NOT_FOUND)
 		}
@@ -62,5 +62,10 @@ export class PageProductsController {
 	@Post('find')
 	async find() { ///// подумать над реализацией
 		return await this.pageProductsService.find()
+	}
+
+	@Post('findLevelPage')
+	async findMenuLevel(@Body() dto: {level: string}) { ///// подумать над реализацией
+		return await this.pageProductsService.findLevelPage(dto)
 	}
 }
