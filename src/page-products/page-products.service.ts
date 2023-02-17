@@ -17,8 +17,8 @@ export class PageProductsService {
 		return await this.pageProductsModel.findOneAndDelete({alias: pageId}).exec();
 	};
 
-	async patch(alias: string, dto: CreatePageProductsDto) {
-		return await this.pageProductsModel.findOneAndUpdate({alias}, createLevel(dto), {new:true}).exec();
+	async patch(pageId: string, dto: CreatePageProductsDto) {
+		return await this.pageProductsModel.findOneAndUpdate({pageId}, createLevel(dto), {new:true}).exec();
 	};
 
 	async getPage(dto: {route: string}) {

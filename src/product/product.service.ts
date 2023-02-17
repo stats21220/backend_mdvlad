@@ -4,6 +4,7 @@ import { InjectModel } from 'nestjs-typegoose';
 import { translitForUrl } from 'translit-npm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
+import { IGetProduct } from './dto/get-product';
 import { ProductModel } from './product.model';
 
 
@@ -12,7 +13,6 @@ export class ProductService {
 	constructor(@InjectModel(ProductModel) private readonly productModel: ModelType<ProductModel>) {}
 
 	async create(dto: CreateProductDto) {
-
 		return await this.productModel.create(createLevel(dto))
 	}
 
@@ -21,14 +21,14 @@ export class ProductService {
 	}
 
 	/////////////////// обновление продукта
-	async patch(id: string, dto: CreateProductDto) {
+	async patch(productId: string, dto: CreateProductDto) {
 
-		return await this.productModel.findByIdAndUpdate(id, createLevel(dto), {new: true}).exec()
+		return await this.productModel.findOneAndUpdate({productId}, createLevel(dto), {new: true})
 	}
 	////////////////// конец обновления продукта
 
-	async get(id: string) {
-		return await this.productModel.findById(id).exec()
+	async get(dto: IGetProduct) {
+		return await this.productModel.findOne({route: dto.route}).exec()
 	}
 
 	
@@ -37,7 +37,7 @@ export class ProductService {
 		const products = await this.productModel.aggregate()
 			.match({categoriesRoute: dto.category})
 			.sort({weight: 1})
-			.limit(dto.limit)
+			// .limit(dto.limit)
 			.project({
 				_id: '$_id', 
 				productId: '$productId', 

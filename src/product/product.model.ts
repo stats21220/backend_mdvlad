@@ -13,7 +13,7 @@ export class PriceProduct {
 
 	@prop()
 	count?: number;
-}
+}[]
 
 export class Productcharacteeristics {
 	

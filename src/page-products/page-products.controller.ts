@@ -41,9 +41,9 @@ export class PageProductsController {
 
 	@UseGuards(JwtAuthGuard)
 	@UsePipes(new ValidationPipe())
-	@Patch(':alias')
-	async patch(@Param('alias') alias: string, @Body() dto: CreatePageProductsDto) {
-		const updatePageProducts = await this.pageProductsService.patch(alias, dto)
+	@Patch(':pageId')
+	async patch(@Param('pageId') pageId: string, @Body() dto: CreatePageProductsDto) {
+		const updatePageProducts = await this.pageProductsService.patch(pageId, dto)
 		if (!updatePageProducts) {
 			throw new NotFoundException(PAGE_PRODUCTS_NOT_FOUND)
 		}

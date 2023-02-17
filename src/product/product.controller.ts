@@ -16,6 +16,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { IdValidationPipe } from 'src/pipes/id-validation.pipe';
 import { CreateProductDto} from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
+import { IGetProduct } from './dto/get-product';
 import { PRODUCT_NOT_FOUND } from './product.constants';
 import { ProductService } from './product.service';
 
@@ -43,20 +44,20 @@ export class ProductController {
 
 	@UseGuards(JwtAuthGuard)
 	@UsePipes(new ValidationPipe())
-	@Patch(':id')
-	async patch(@Param('id', IdValidationPipe) id: string, @Body() dto: CreateProductDto) {
-		const updateProduct = await this.productService.patch(id, dto)
+	@Patch(':productId')
+	async patch(@Param('productId') productId: string, @Body() dto: CreateProductDto) {
+		const updateProduct = await this.productService.patch(productId, dto)
 		if (!updateProduct) {
 			throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND)
 		}
 		return updateProduct
 	}
 
-	@Get(':id')
-	async getId(@Param('id', IdValidationPipe) id: string) {
-		const getProduct = await this.productService.get(id)
+	@Post('getProduct')
+	async get(@Body() dto: IGetProduct) {
+		const getProduct = await this.productService.get(dto)
 		if (!getProduct) {
-			throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND)
+			return {productId: null}
 		}
 		return getProduct
 	}

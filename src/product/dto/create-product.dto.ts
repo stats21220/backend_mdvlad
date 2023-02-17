@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import {IsArray, IsNumber, IsNumberString, IsOptional, IsString, max, Max, Min, ValidateNested} from 'class-validator'
+import {isArray, IsArray, IsNumber, IsNumberString, IsOptional, IsString, max, Max, Min, ValidateNested} from 'class-validator'
 import { COUNT_PRODUCT_NOT_NUMBER, MAIN_ROUTE_ERROR, TAGS_ROUTE_NOT_ARRAY_STRING } from '../product.constants';
 
 export class PriceProductDto {
@@ -20,9 +20,9 @@ export class ProductCharacteeristicsDto {
 	@IsString({message: 'Название пункта характерестики дожен быть строкой'})
 	title: string;
 
-	@IsNumber({}, {message: 'Значение пункта характеристики должен быть числом или строкой'})
+
 	@IsString()
-	value: string | number;
+	value: string;
 }
 
 export class ProductCategoryItemDto {
@@ -88,15 +88,24 @@ export class CreateProductDto {
 	@Type(() => ProductCategoryLevelDto)
 	categories: ProductCategoryLevelDto;
 
+	@IsArray()
+	@ValidateNested()
+	@Type(() => PriceProductDto)
 	price: PriceProductDto[];
+
+	@IsOptional()
+	@IsArray()
+	@ValidateNested()
+	@Type(() => ProductCategoryLevelDto)
 	oldPrice?: PriceProductDto[];
 
 	@IsOptional()
 	@IsString({each: true, message: TAGS_ROUTE_NOT_ARRAY_STRING})
 	categoriesRoute?: string[];
 
-	// @ValidateNested({each: true})
-	// @Type(() => ProductCharacteeristicsDto)
+	@IsArray()
+	@ValidateNested()
+	@Type(() => ProductCharacteeristicsDto)
 	characteristics: ProductCharacteeristicsDto[];
 
 	@IsNumber()

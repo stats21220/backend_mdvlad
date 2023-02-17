@@ -2,11 +2,11 @@ import { IsString, IsArray, IsNumber } from "class-validator";
 
 export class FindProductDto {
 
-	@IsString()
-	category: string;
+	@IsString({each: true})
+	category: string[] | string;
 
-	@IsNumber()
-	limit: number
+	// @IsNumber()
+	// limit: number
 }
 
 
