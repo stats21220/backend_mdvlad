@@ -52,6 +52,7 @@ export class PageProductsController {
 
 	@Post('getPage')
 	async getPage(@Body() dto: {route: string} ) {
+		
 		const getPageProducts = await this.pageProductsService.getPage(dto)
 		if (!getPageProducts) {
 			throw new NotFoundException(PAGE_PRODUCTS_NOT_FOUND)

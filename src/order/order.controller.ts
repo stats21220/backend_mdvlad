@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { CreateOrderDto } from './dto/create.order.dto';
+import { OrderSaleDto } from './dto/order.sale.dto';
 import { ORDER_NOT_FOUND } from './order.constants';
 import { OrderService } from './order.service';
 
@@ -23,6 +24,11 @@ export class OrderController {
 	@Post('create')
 	async create(@Body() dto: CreateOrderDto) {
 		return await this.orderService.create(dto)
+	}
+
+	@Post('sale')
+	async sale(@Body() dto: CreateOrderDto) {
+		return await this.orderService.sale(dto)
 	}
 
 	@UseGuards(JwtAuthGuard)

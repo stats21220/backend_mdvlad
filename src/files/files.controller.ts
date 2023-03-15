@@ -11,15 +11,20 @@ export class FilesController {
 
 	}
 
+
 	@Post('upload')
-	@UseGuards(JwtAuthGuard)
-	@UseInterceptors(FileInterceptor('files'))
+	// @UseGuards(JwtAuthGuard)
+	@UseInterceptors(FileInterceptor('file'))
 	async uploadFile(@UploadedFile() file: Express.Multer.File): Promise<FileElementResponse[]> {
+		
+		console.log(file);
+		
+		
 		const firstNameImage = file.originalname.split('.')
 		const saveArray: MFile[] = [{
-				originalname: `${firstNameImage[0]}.${firstNameImage[firstNameImage.length - 1]}`,
-				buffer: file.buffer
-			}]
+			originalname: `${firstNameImage[0]}.${firstNameImage[firstNameImage.length - 1]}`,
+			buffer: file.buffer
+		}]
 		if (file.mimetype.includes('image')) { // тип изображения
 			const buffers = await this.filesService.converToWebp(file.buffer)
 			for (const buffer of buffers) {
@@ -29,6 +34,7 @@ export class FilesController {
 			});
 			}
 		}
+		
 		return await this.filesService.saveFiles(saveArray)
 	}
 }

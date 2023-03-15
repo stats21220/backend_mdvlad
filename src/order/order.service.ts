@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ModelType } from '@typegoose/typegoose/lib/types';
 import { InjectModel } from 'nestjs-typegoose';
 import { CreateOrderDto } from './dto/create.order.dto';
+import { OrderSaleDto } from './dto/order.sale.dto';
 import { OrderModel } from './order.model';
 
 @Injectable()
@@ -10,6 +11,10 @@ export class OrderService {
 
 	async create(dto: CreateOrderDto) {
 		return await this.orderModel.create(dto)
+	}
+
+	async sale(dto: CreateOrderDto) {
+		return await this.orderModel.findOneAndReplace(dto)
 	}
 
 	async delete(id: string) {

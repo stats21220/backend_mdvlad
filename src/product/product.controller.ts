@@ -42,8 +42,8 @@ export class ProductController {
 		return deleteProduct
 	}
 
-	@UseGuards(JwtAuthGuard)
-	@UsePipes(new ValidationPipe())
+	// @UseGuards(JwtAuthGuard)
+	// @UsePipes(new ValidationPipe())
 	@Patch(':productId')
 	async patch(@Param('productId') productId: string, @Body() dto: CreateProductDto) {
 		const updateProduct = await this.productService.patch(productId, dto)
