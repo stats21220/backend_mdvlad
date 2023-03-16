@@ -26,7 +26,7 @@ export class OrderController {
 		return await this.orderService.create(dto)
 	}
 
-	@Post('sale')
+	@Patch('sale')
 	async sale(@Body() dto: CreateOrderDto) {
 		return await this.orderService.sale(dto)
 	}

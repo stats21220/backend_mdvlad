@@ -16,7 +16,6 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { IdValidationPipe } from 'src/pipes/id-validation.pipe';
 import { CreateProductDto} from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
-import { IGetProduct } from './dto/get-product';
 import { PRODUCT_NOT_FOUND } from './product.constants';
 import { ProductService } from './product.service';
 
@@ -33,9 +32,9 @@ export class ProductController {
 	}
 
 	@UseGuards(JwtAuthGuard)
-	@Delete(':id')
-	async delete(@Param('id', IdValidationPipe) id: string) {
-		const deleteProduct = await this.productService.delete(id)
+	@Delete(':productId')
+	async delete(@Param('productId') productId: string) {
+		const deleteProduct = await this.productService.delete(productId)
 		if (!deleteProduct) {
 			throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND)
 		}
@@ -53,9 +52,9 @@ export class ProductController {
 		return updateProduct
 	}
 
-	@Post('getProduct')
-	async get(@Body() dto: IGetProduct) {
-		const getProduct = await this.productService.get(dto)
+	@Get(':productId')
+	async get(@Param('productId') productId: string) {
+		const getProduct = await this.productService.get(productId)
 		if (!getProduct) {
 			return {productId: null}
 		}

@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import {isArray, IsArray, IsNumber, IsNumberString, IsOptional, IsString, max, Max, Min, ValidateNested} from 'class-validator'
+import {IsArray, IsNumber, IsNumberString, IsOptional, IsString, max, Max, Min, ValidateNested} from 'class-validator'
 import { COUNT_PRODUCT_NOT_NUMBER, MAIN_ROUTE_ERROR, TAGS_ROUTE_NOT_ARRAY_STRING } from '../product.constants';
 
 export class PriceProductDto {
@@ -33,10 +33,6 @@ export class ProductCategoryItemDto {
 	@IsOptional()
 	@IsString()
 	alias?: string;
-
-	@IsOptional()
-	@IsString({message: 'Значение роута категории должно быть строкой'})
-	route?: string
 }
 
 export class ProductCategoryLevelDto {
@@ -70,8 +66,9 @@ export class CreateProductDto {
 	@IsNumber()
 	productId: number;
 
+	@IsOptional()
 	@IsString()
-	image: string;
+	image?: string;
 
 	@IsString()
 	title: string;
@@ -79,10 +76,6 @@ export class CreateProductDto {
 	@IsOptional()
 	@IsString()
 	alias?: string
-
-	@IsOptional()
-	@IsString({message: MAIN_ROUTE_ERROR})
-	route?: string;
 
 	@ValidateNested()
 	@Type(() => ProductCategoryLevelDto)
@@ -101,7 +94,7 @@ export class CreateProductDto {
 
 	@IsOptional()
 	@IsString({each: true, message: TAGS_ROUTE_NOT_ARRAY_STRING})
-	categoriesRoute?: string[];
+	aliasesRoutes?: string[];
 
 	@IsArray()
 	@ValidateNested()

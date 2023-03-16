@@ -12,7 +12,6 @@ import {
 	ValidationPipe 
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { IdValidationPipe } from 'src/pipes/id-validation.pipe';
 import { CreatePageProductsDto } from './dto/create.page-products.dto';
 import { PAGE_PRODUCTS_NOT_FOUND } from './page-products.constants';
 import { PageProductsService } from './page-products.service';
@@ -50,10 +49,10 @@ export class PageProductsController {
 		return updatePageProducts
 	}
 
-	@Post('getPage')
-	async getPage(@Body() dto: {route: string} ) {
+	@Get(':alias')
+	async getPageAlias(@Param('alias') alias: string) {
 		
-		const getPageProducts = await this.pageProductsService.getPage(dto)
+		const getPageProducts = await this.pageProductsService.getPageAlias(alias)
 		if (!getPageProducts) {
 			throw new NotFoundException(PAGE_PRODUCTS_NOT_FOUND)
 		}
@@ -63,10 +62,5 @@ export class PageProductsController {
 	@Post('find')
 	async find() { ///// подумать над реализацией
 		return await this.pageProductsService.find()
-	}
-
-	@Post('findLevelPage')
-	async findMenuLevel(@Body() dto: {level: string}) { ///// подумать над реализацией
-		return await this.pageProductsService.findLevelPage(dto)
 	}
 }

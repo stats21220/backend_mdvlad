@@ -4,7 +4,6 @@ import { InjectModel } from 'nestjs-typegoose';
 import { translitForUrl } from 'translit-npm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
-import { IGetProduct } from './dto/get-product';
 import { ProductModel } from './product.model';
 
 
@@ -16,26 +15,25 @@ export class ProductService {
 		return await this.productModel.create(createLevel(dto))
 	}
 
-	async delete(id: string) {
-		return await this.productModel.findByIdAndDelete(id).exec()
+	async delete(productId: string) {
+		return await this.productModel.findOneAndDelete({productId}).exec()
 	}
 
 	/////////////////// обновление продукта
 	async patch(productId: string, dto: CreateProductDto) {
-
-		return await this.productModel.findOneAndUpdate({productId}, createLevel(dto), {new: true})
+		return await this.productModel.findOneAndUpdate({productId}, createLevel(dto), {new: true}).exec()
 	}
 	////////////////// конец обновления продукта
 
-	async get(dto: IGetProduct) {
-		return await this.productModel.findOne({route: dto.route}).exec()
+	async get(productId: string) {
+		return await this.productModel.findOne({productId}).exec()
 	}
 
 	
 	///// подумай над тегами 
 	async find(dto: FindProductDto) {
 		const products = await this.productModel.aggregate()
-			.match({categoriesRoute: dto.category})
+			.match({aliasesRoutes: {$all: dto.alias}})
 			.sort({weight: 1})
 			// .limit(dto.limit)
 			.project({
@@ -44,12 +42,13 @@ export class ProductService {
 				image: '$image', 
 				title: '$title', 
 				alias: '$alias',
-				route: '$route',
 				price: '$price',
 				oldPrice: '$oldPrice',
-				categoriesRoute: '$categoriesRoute',
+				aliasesRoutes: '$aliasesRoutes',
 				count: '$count',
-				weight: '$weight'
+				weight: '$weight',
+				popular: '$popular',
+				special: '$special'
 			})
 		// const products = await  this.productModel.aggregate()
 			// .match({tagsRoute: {$all: dto.route}})
@@ -60,14 +59,13 @@ export class ProductService {
 
 
 const createLevel = (dto: CreateProductDto) => {
-		dto.categoriesRoute = [];
+		dto.image = dto.productId + '.webp'
+		dto.aliasesRoutes = [];
 		dto.alias = translitForUrl(dto.title)
 		const alias = translitForUrl(dto.categories.first.level)
 		const level1 = '/' + alias;
-		dto.categories.first.route = level1;
 		dto.categories.first.alias = alias;
-		dto.route = level1 + translitForUrl('/' + dto.title);
-		dto.categoriesRoute?.push(alias)
+		dto.aliasesRoutes.push(alias)
 		
 		//// обработка ошибки 2 уровня
 		if (!dto.categories.second && dto.categories.third) {
@@ -75,12 +73,12 @@ const createLevel = (dto: CreateProductDto) => {
 		} 
 		//// если все хорошо на 2 уровне
 		else if (dto.categories.second) {
+			if (dto.categories.first.level === dto.categories.second?.level) { 
+				throw new HttpException('название уровня должно быть уникальным 2 level', HttpStatus.BAD_REQUEST);
+			}
 			const alias = translitForUrl(dto.categories.second.level)
-			const level2 = dto.categories.first.route + '/' + alias;
-			dto.categories.second.route = level2;
 			dto.categories.second.alias = alias;
-			dto.route = level2 + translitForUrl('/' + dto.title);
-			dto.categoriesRoute?.push(alias)
+			dto.aliasesRoutes?.push(alias)
 		} else {
 			dto.categories.second = undefined;
 		};
@@ -91,23 +89,30 @@ const createLevel = (dto: CreateProductDto) => {
 		}
 		//// если все хорошо на 3 уровне
 		else if (dto.categories.second && dto.categories.third) {
+				if (
+						dto.categories.third?.level === dto.categories.first?.level ||
+						dto.categories.third?.level === dto.categories.second?.level
+					) { 
+						throw new HttpException('название уровня должно быть уникальным 3 level', HttpStatus.BAD_REQUEST);
+				}
 				const alias = translitForUrl(dto.categories.third.level);
-				const level3 = dto.categories.second.route + '/' + alias;
-				dto.categories.third.route = level3;
 				dto.categories.third.alias = alias;
-				dto.route = level3 + translitForUrl('/' + dto.title);
-				dto.categoriesRoute?.push(alias)
+				dto.aliasesRoutes?.push(alias)
 		} else {
 			dto.categories.third = undefined;
 		};
 
 		if (dto.categories.third && dto.categories.fifth) {
+				if (
+						dto.categories.fifth?.level === dto.categories.first?.level ||
+						dto.categories.fifth?.level === dto.categories.second?.level ||
+						dto.categories.fifth?.level === dto.categories.third?.level
+					) { 
+						throw new HttpException('название уровня должно быть уникальным 4 level', HttpStatus.BAD_REQUEST);
+				}
 				const alias = translitForUrl(dto.categories.fifth.level);
-				const level4 = dto.categories.third.route + '/' + alias;
-				dto.categories.fifth.route = level4;
 				dto.categories.fifth.alias = alias;
-				dto.route = level4 + translitForUrl('/' + dto.title);
-				dto.categoriesRoute?.push(alias)
+				dto.aliasesRoutes?.push(alias)
 		} else {
 			dto.categories.fifth = undefined;
 		};
