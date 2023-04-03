@@ -15,11 +15,7 @@ export class FilesController {
 	@Post('upload')
 	// @UseGuards(JwtAuthGuard)
 	@UseInterceptors(FileInterceptor('file'))
-	async uploadFile(@UploadedFile() file: Express.Multer.File): Promise<FileElementResponse[]> {
-		
-		console.log(file);
-		
-		
+	async uploadFile(@UploadedFile() file: Express.Multer.File): Promise<FileElementResponse[]> {	
 		const firstNameImage = file.originalname.split('.')
 		const saveArray: MFile[] = [{
 			originalname: `${firstNameImage[0]}.${firstNameImage[firstNameImage.length - 1]}`,
@@ -27,6 +23,28 @@ export class FilesController {
 		}]
 		if (file.mimetype.includes('image')) { // тип изображения
 			const buffers = await this.filesService.converToWebp(file.buffer)
+			for (const buffer of buffers) {
+				saveArray.push({
+				originalname: `${file.originalname.split('.')[0]}.${buffer.resize}.webp`,
+				buffer: buffer.buffer
+			});
+			}
+		}
+		
+		return await this.filesService.saveFiles(saveArray)
+	}
+
+	@Post('slide')
+	// @UseGuards(JwtAuthGuard)
+	@UseInterceptors(FileInterceptor('file'))
+	async uploadSlide(@UploadedFile() file: Express.Multer.File): Promise<FileElementResponse[]> {	
+		const firstNameImage = file.originalname.split('.')
+		const saveArray: MFile[] = [{
+			originalname: `${firstNameImage[0]}.${firstNameImage[firstNameImage.length - 1]}`,
+			buffer: file.buffer
+		}]
+		if (file.mimetype.includes('image')) { // тип изображения
+			const buffers = await this.filesService.convertSlideToWebp(file.buffer)
 			for (const buffer of buffers) {
 				saveArray.push({
 				originalname: `${file.originalname.split('.')[0]}.${buffer.resize}.webp`,

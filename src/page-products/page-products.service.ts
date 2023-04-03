@@ -21,52 +21,65 @@ export class PageProductsService {
 		return await this.pageProductsModel.findOneAndUpdate({pageId}, createLevel(dto), {new:true}).exec();
 	};
 
-	async getPageAlias(alias: string) {
-		return await this.pageProductsModel.findOne({alias}).exec()
+	async get(pageId: number) {
+		return await this.pageProductsModel.findOne({pageId}).exec()
 	};
 
-	async find() {
-		const pages = await this.pageProductsModel.aggregate()
+	async getPaths() {
+		const paths = await this.pageProductsModel.aggregate()
 			.match({})
-			.group({_id: '$parentAlias',
-				firstLevel: {$first: '$categories.first.alias'},
-				secondLevel: {$first: '$categories.second.alias'},
-				pages: {$push: {
+			.project({
+					_id: 0,
+					categories: 0,
+					title: 0,
+					sortId: 0,
+					IdCategoryPages: 0,
+					description: 0,
+					parentId: 0,
+					createdAt: 0,
+					updatedAt: 0,
+					__v: 0,
+			})
+			return paths
+	}
+
+	async findAlias(alias: string) {
+		const pages = await this.pageProductsModel.aggregate()
+			.match({parentAlias: alias})
+			.project({
 					_id: '$_id',
 					title: '$title',
 					sortId: '$sortId',
 					alias: '$alias',
-					categories: {
-						first: {
-							level: '$categories.first.level',
-							alias: '$categories.first.alias'
-						},
-						second: {
-							level: '$categories.second.level',
-							alias: '$categories.second.alias'
-						},
-						third: {
-							level: '$categories.third.level',
-							alias: '$categories.third.alias'
-						},
-						fifth: {
-							level: '$categories.fifth.level',
-							alias: '$categories.fifth.alias'
-						},
-					}
-				}}})
+					pageId: '$pageId'
+		})
+		return pages;
+	}
+		async find() {
+		const pages = await this.pageProductsModel.aggregate()
+			.match({})
+			.sort({sortId: 1})
+			.group({
+				_id: '$parentId',
+				pages: {$push: {					
+					title: '$title',
+					sortId: '$sortId',
+					pageId: '$pageId',
+					alias: '$alias',
+					parentId: '$parentId'}}
+			})
 		return pages;
 	};
 };
 
 const createLevel = (dto: CreatePageProductsDto) => {
 		dto.alias = translitForUrl(dto.title);
-		dto.aliases = [];
+		dto.IdCategoryPages = [];
 		/// 1 level
 		const alias = translitForUrl(dto.categories.first.level);
-		dto.aliases.push(alias)
+		dto.IdCategoryPages.push(dto.categories.first.pageId)
 		dto.categories.first.alias = alias
-		dto.parentAlias = '/';
+		dto.parentId = 0;
 
 		/// 2 Level
 		//// обработка оcategoriesшибки 2 уровня
@@ -79,10 +92,10 @@ const createLevel = (dto: CreatePageProductsDto) => {
 				throw new HttpException('название уровня должно быть уникальным 2 level', HttpStatus.BAD_REQUEST);
 			}
 			const alias = translitForUrl(dto.categories.second.level);
-			dto.aliases.push(alias);
-			const parentAlias = dto.categories.first.alias
+			dto.IdCategoryPages.push(dto.categories.second.pageId);
+			const parentId = dto.categories.first.pageId
 			dto.categories.second.alias = alias;
-			dto.parentAlias = parentAlias;
+			dto.parentId = parentId;
 		} else {
 			dto.categories.second = undefined;
 		};
@@ -103,10 +116,10 @@ const createLevel = (dto: CreatePageProductsDto) => {
 						throw new HttpException('название уровня должно быть уникальным 3 level', HttpStatus.BAD_REQUEST);
 				}
 				const alias = translitForUrl(dto.categories.third.level);
-				dto.aliases.push(alias)
-				const parentAlias = dto.categories.second.alias;
+				dto.IdCategoryPages.push(dto.categories.third.pageId)
+				const parentId = dto.categories.second.pageId;
 				dto.categories.third.alias = alias;
-				dto.parentAlias = parentAlias;
+				dto.parentId = parentId;
 		} else {
 			dto.categories.third = undefined;
 		};
@@ -121,10 +134,10 @@ const createLevel = (dto: CreatePageProductsDto) => {
 						throw new HttpException('название уровня должно быть уникальным 4 level', HttpStatus.BAD_REQUEST);
 				}
 				const alias = translitForUrl(dto.categories.fifth.level);
-				dto.aliases.push(alias)
-				const parentAlias = dto.categories.third.alias;
+				dto.IdCategoryPages.push(dto.categories.fifth.pageId)
+				const parentId = dto.categories.third.pageId;
 				dto.categories.fifth.alias = alias;
-				dto.parentAlias = parentAlias;
+				dto.parentId = parentId;
 		} else {
 			dto.categories.fifth = undefined;
 		};

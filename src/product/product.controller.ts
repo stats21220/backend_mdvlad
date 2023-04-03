@@ -34,7 +34,7 @@ export class ProductController {
 	@UseGuards(JwtAuthGuard)
 	@Delete(':productId')
 	async delete(@Param('productId') productId: string) {
-		const deleteProduct = await this.productService.delete(productId)
+		const deleteProduct = await this.productService.delete(+productId)
 		if (!deleteProduct) {
 			throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND)
 		}
@@ -45,7 +45,7 @@ export class ProductController {
 	// @UsePipes(new ValidationPipe())
 	@Patch(':productId')
 	async patch(@Param('productId') productId: string, @Body() dto: CreateProductDto) {
-		const updateProduct = await this.productService.patch(productId, dto)
+		const updateProduct = await this.productService.patch(+productId, dto)
 		if (!updateProduct) {
 			throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND)
 		}
@@ -54,9 +54,9 @@ export class ProductController {
 
 	@Get(':productId')
 	async get(@Param('productId') productId: string) {
-		const getProduct = await this.productService.get(productId)
+		const getProduct = await this.productService.get(+productId)
 		if (!getProduct) {
-			return {productId: null}
+			return {_id: '0'}
 		}
 		return getProduct
 	}
@@ -65,5 +65,10 @@ export class ProductController {
 	@Post('find')
 	async find(@Body() dto: FindProductDto) {
 		return await this.productService.find(dto)
+	}
+
+	@Get('paths/products')
+	async findPaths() {
+		return await this.productService.findPaths()
 	}
 }

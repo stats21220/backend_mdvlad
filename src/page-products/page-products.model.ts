@@ -8,6 +8,9 @@ export class PageCategoryItem {
 
 	@prop()
 	alias?: string;
+
+	@prop()
+	pageId: number;
 }
 
 
@@ -45,7 +48,7 @@ export class PageProductsModel extends TimeStamps {
 	alias?: string
 
 	@prop()
-	aliases?: string[]
+	IdCategoryPages?: number[]
 
 	@prop()
 	description: string;
@@ -54,5 +57,5 @@ export class PageProductsModel extends TimeStamps {
 	categories: LevelPage;
 
 	@prop({index:true})
-	parentAlias?: string;
+	parentId?: number;
 }

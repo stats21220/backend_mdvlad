@@ -49,12 +49,12 @@ export class PageProductsController {
 		return updatePageProducts
 	}
 
-	@Get(':alias')
-	async getPageAlias(@Param('alias') alias: string) {
+	@Get(':pageId')
+	async getPageAlias(@Param('pageId') pageId: string) {
 		
-		const getPageProducts = await this.pageProductsService.getPageAlias(alias)
+		const getPageProducts = await this.pageProductsService.get(+pageId)
 		if (!getPageProducts) {
-			throw new NotFoundException(PAGE_PRODUCTS_NOT_FOUND)
+			return {_id: '0'}
 		}
 		return getPageProducts
 	}
@@ -62,5 +62,15 @@ export class PageProductsController {
 	@Post('find')
 	async find() { ///// подумать над реализацией
 		return await this.pageProductsService.find()
+	}
+
+	@Get('find/:alias')
+	async findAlias(@Param('alias') alias: string) {
+		return await this.pageProductsService.findAlias(alias)
+	}
+
+	@Get('paths/pages')
+	async getAliases() {
+		return await this.pageProductsService.getPaths()
 	}
 }

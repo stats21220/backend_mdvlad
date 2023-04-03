@@ -30,7 +30,10 @@ export class ProductCategoryItem {
 	level: string;
 
 	@prop()
-	alias?: string
+	alias?: string;
+
+	@prop()
+	pageId: number;
 }
 
 export class ProductCategoryLevel {
@@ -73,7 +76,7 @@ export class ProductModel extends TimeStamps {
 	oldPrice?: PriceProduct[];
 	
 	@prop({index:true})
-	aliasesRoutes?: string[];
+	IdCategoryPages?: string[];
 
 	@prop({type: () => [Productcharacteeristics]})
 	characteristics: Productcharacteeristics[];

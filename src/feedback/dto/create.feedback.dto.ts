@@ -3,10 +3,10 @@ import { IsString } from "class-validator";
 export class CreateFeedbackDto {
 
 	@IsString()
-	firstName: string;
+	name: string;
 
 	@IsString()
-	lastName: string;
+	email: string;
 
 	@IsString()
 	phone: string;

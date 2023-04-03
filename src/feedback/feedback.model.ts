@@ -6,17 +6,17 @@ export interface FeedbackModel extends Base {}
 export class FeedbackModel extends TimeStamps {
 
 	@prop()
-	firstName: string;
+	name: string;
 
 	@prop()
-	lastName: string;
+	email: string;
 
 	@prop()
 	phone: string;
 
 	@prop()
 	description: string
-	
+
 	@prop()
-	createdAt: Date
+	userId?: number
 }

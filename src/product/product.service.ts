@@ -15,17 +15,17 @@ export class ProductService {
 		return await this.productModel.create(createLevel(dto))
 	}
 
-	async delete(productId: string) {
+	async delete(productId: number) {
 		return await this.productModel.findOneAndDelete({productId}).exec()
 	}
 
 	/////////////////// обновление продукта
-	async patch(productId: string, dto: CreateProductDto) {
+	async patch(productId: number, dto: CreateProductDto) {
 		return await this.productModel.findOneAndUpdate({productId}, createLevel(dto), {new: true}).exec()
 	}
 	////////////////// конец обновления продукта
 
-	async get(productId: string) {
+	async get(productId: number) {
 		return await this.productModel.findOne({productId}).exec()
 	}
 
@@ -33,7 +33,7 @@ export class ProductService {
 	///// подумай над тегами 
 	async find(dto: FindProductDto) {
 		const products = await this.productModel.aggregate()
-			.match({aliasesRoutes: {$all: dto.alias}})
+			.match({IdCategoryPages: {$all: dto.pageId.map(id => +id)}})
 			.sort({weight: 1})
 			// .limit(dto.limit)
 			.project({
@@ -44,7 +44,7 @@ export class ProductService {
 				alias: '$alias',
 				price: '$price',
 				oldPrice: '$oldPrice',
-				aliasesRoutes: '$aliasesRoutes',
+				IdCategoryPages: '$IdCategoryPages',
 				count: '$count',
 				weight: '$weight',
 				popular: '$popular',
@@ -55,17 +55,23 @@ export class ProductService {
 			// .project({tags: '$tagsRoute', }).exec();
 		return products
 	}
+
+	async findPaths() {
+		return await this.productModel.aggregate()
+			.match({})
+			.project({alias: '$alias', productId: '$productId', _id: 0})
+	}
 }
 
 
 const createLevel = (dto: CreateProductDto) => {
 		dto.image = dto.productId + '.webp'
-		dto.aliasesRoutes = [];
+		dto.IdCategoryPages = [];
 		dto.alias = translitForUrl(dto.title)
 		const alias = translitForUrl(dto.categories.first.level)
 		const level1 = '/' + alias;
 		dto.categories.first.alias = alias;
-		dto.aliasesRoutes.push(alias)
+		dto.IdCategoryPages.push(dto.categories.first.pageId)
 		
 		//// обработка ошибки 2 уровня
 		if (!dto.categories.second && dto.categories.third) {
@@ -78,7 +84,7 @@ const createLevel = (dto: CreateProductDto) => {
 			}
 			const alias = translitForUrl(dto.categories.second.level)
 			dto.categories.second.alias = alias;
-			dto.aliasesRoutes?.push(alias)
+			dto.IdCategoryPages?.push(dto.categories.second.pageId)
 		} else {
 			dto.categories.second = undefined;
 		};
@@ -97,7 +103,7 @@ const createLevel = (dto: CreateProductDto) => {
 				}
 				const alias = translitForUrl(dto.categories.third.level);
 				dto.categories.third.alias = alias;
-				dto.aliasesRoutes?.push(alias)
+				dto.IdCategoryPages?.push(dto.categories.third.pageId)
 		} else {
 			dto.categories.third = undefined;
 		};
@@ -112,7 +118,7 @@ const createLevel = (dto: CreateProductDto) => {
 				}
 				const alias = translitForUrl(dto.categories.fifth.level);
 				dto.categories.fifth.alias = alias;
-				dto.aliasesRoutes?.push(alias)
+				dto.IdCategoryPages?.push(dto.categories.fifth.pageId)
 		} else {
 			dto.categories.fifth = undefined;
 		};

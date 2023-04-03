@@ -25,6 +25,55 @@ export class FilesService {
 		return res;
 	}
 
+	async saveSlide(files: MFile[]): Promise<FileElementResponse[]> {
+		const Folder  = `${path}/uploads`;
+		await ensureDir(Folder);
+
+		const res: FileElementResponse[] = [];
+
+		for (const file of files) {
+			const fileFolder = Folder + `/${file.originalname.split('.')[0]}`
+			await ensureDir(fileFolder);
+			await writeFile(`${fileFolder}/${file.originalname}`, file.buffer);
+			res.push({url: `${fileFolder}/${file.originalname}`, name: file.originalname});
+		}
+		
+		return res;
+	}
+
+	async convertSlideToWebp(file: Buffer): Promise<{resize: string, buffer: Buffer}[]> {
+	const buffer: {resize: string, buffer: Buffer}[] = []
+
+	const s = await sharp(file)
+		.resize(700, 206)
+		.webp()
+		.toBuffer()
+	
+	const m = await sharp(file)
+		.resize(1200, 353)
+		.webp()
+		.toBuffer()
+
+	const b = await sharp(file)
+		.resize(1600, 471)
+		.webp()
+		.toBuffer()
+
+	buffer.push(
+		{resize: '700', buffer: s},
+		{resize: '1200', buffer: m},
+		{resize: '1600', buffer: b}
+		)
+
+	// buffer.push(s, m, b)
+
+	return buffer
+	// return sharp(file)
+	// 	.webp()
+	// 	.toBuffer()
+	}
+
+
 	async converToWebp(file: Buffer): Promise<{resize: string, buffer: Buffer}[]> {
 		const buffer: {resize: string, buffer: Buffer}[] = []
 

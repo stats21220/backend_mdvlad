@@ -33,6 +33,9 @@ export class ProductCategoryItemDto {
 	@IsOptional()
 	@IsString()
 	alias?: string;
+
+	@IsNumber()
+	pageId: number;
 }
 
 export class ProductCategoryLevelDto {
@@ -94,7 +97,7 @@ export class CreateProductDto {
 
 	@IsOptional()
 	@IsString({each: true, message: TAGS_ROUTE_NOT_ARRAY_STRING})
-	aliasesRoutes?: string[];
+	IdCategoryPages?: number[];
 
 	@IsArray()
 	@ValidateNested()

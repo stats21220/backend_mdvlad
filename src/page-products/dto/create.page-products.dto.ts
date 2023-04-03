@@ -9,6 +9,9 @@ export class PageLevelItemDto {
 	@IsOptional()
 	@IsString()
 	alias?: string;
+
+	@IsNumber()
+	pageId: number;
 }
 
 export class LevelPageDto {
@@ -48,7 +51,7 @@ export class CreatePageProductsDto {
 
 	@IsOptional()
 	@IsString({each: true})
-	aliases: string[]
+	IdCategoryPages?: number[]
 
 	@IsString({message: 'Описание страницы должно быть строкой'})
 	description: string;
@@ -58,6 +61,6 @@ export class CreatePageProductsDto {
 	categories: LevelPageDto;
 
 	@IsOptional()
-	@IsString({message: 'Путь страницы должен быть строкой'})
-	parentAlias?: string;
+	@IsNumber()
+	parentId?: number;
 }
